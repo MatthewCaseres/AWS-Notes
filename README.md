@@ -1,6 +1,6 @@
 Hi, I'm working on putting together some notes on AWS.
 
-You can read the notes on my website - (https://www.markdownbooks.com/)[markdownbooks.com]
+You can read the notes on my website - [https://www.markdownbooks.com/](markdownbooks.com)
 
 # AWS Exam Notes
 
