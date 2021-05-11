@@ -14,19 +14,19 @@ Consider an application like Instagram. There are users. Users can take photos. 
 
 The user table contains our users. If we have two users, one cat and one dog, the user table might look like this:
 
-![](../images/databases/rdbms-users.png)
+![](./images/rdbms-users.png)
 
 Suppose we have one photo, a selfie uploaded by the cat. Notice that we use the `id` from the user table to indicate the owner of the photo. This is why it is a **relational** database.
 
-![](../images/databases/rdbms-photos.png)
+![](./images/rdbms-photos.png)
 
 The user with id 2 likes the photo with id 1, the dog liked the cat's selfie.
 
-![](../images/databases/rdbms-likes.png)
+![](./images/rdbms-likes.png)
 
 Here is a rough diagram of the way things work. ER diagrams are outside the scope of discussion so some conventions are not followed.
 
-![](../images/databases/rdbms-relational.svg)
+![](./images/rdbms-relational.svg)
 
 ### What is a NoSQL database?
 
@@ -70,11 +70,11 @@ Relational databases can be row oriented or column oriented.
 
 Row oriented databases store entries of a row in adjacent memory locations. This makes it easy to insert/delete rows for transactional (OLTP) workloads.
 
-![](../images/databases/oltp-row.png)
+![](./images/oltp-row.png)
 
 Column oriented databases store entries of a column in adjacent memory locations. Analytical workloads (OLAP) often involve operations on a column like summing it or grouping it, so this architecture is optimized for analytical workloads.
 
-![](../images/databases/olap-col.png)
+![](./images/olap-col.png)
 
 Amazon Redshift is column oriented, databases on RDS are row oriented. You can learn more about Redshift architecture [here](https://docs.aws.amazon.com/redshift/latest/dg/c_columnar_storage_disk_mem_mgmnt.html)
 
@@ -171,8 +171,11 @@ We don't have to worry about availability or fault tolerance, they are built rig
 
 ### Performance
 
-* DynamoDB Accelerator (DAX) is an in-memory cache that improves read performance up to 10x, bringing read times from single digit millisecond to microseconds.
-* DynamoDB global tables replicate tables across regions to scale capacity and allow local access in selected regions for improved performance.
+DynamoDB Accelerator (DAX) is an in-memory cache that improves read performance up to 10x, bringing read times from single digit millisecond to microseconds.
+
+![DynamoDB DAX Diagram](./images/dynamo-dax.png)
+
+DynamoDB global tables replicate tables across regions to scale capacity and allow local access in selected regions for improved performance.
 
 ### Serverless
 
@@ -191,6 +194,7 @@ We don't have to worry about availability or fault tolerance, they are built rig
 [DynamoDB features overview]()
 
 
+
 ## Amazon Redshift
 
 Redshift is a column oriented database used for OLAP. 
@@ -199,7 +203,7 @@ You load data into Redshift tables, and then you do parallel processing on the l
 
 The leader node sends instructions to the compute nodes which perform the instructions in parallel on data from the client applications.
 
-![](../images/databases/redshift.png)
+![](./images/redshift.png)
 
 You can query live databases using federated queries. You can query from S3 without loading into Redshift tables using Amazon Redshift Spectrum.
 

@@ -1,5 +1,6 @@
 # VPC
 
+<<<<<<< Updated upstream
 ## Networking Basics
 
 ### IPv4
@@ -39,6 +40,8 @@ Can you make sense of the relationship between the CIDR block and the IP range?
 
 [CIDR on Wikipedia](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)
 
+=======
+>>>>>>> Stashed changes
 ## VPC Basics
 
 The VPC (Virtual Private Cloud) is how networking is done in the AWS cloud. The VPC is like having your own data center inside AWS. The VPC separates resources from different customers and different projects.

@@ -7,3 +7,4 @@
 * [AWS Global Infrastructure](Global-Infrastructure.md)
 * [SNS](SNS.md)
 * [SQS](SQS.md)
+* [Kinesis](Kinesis.md)
