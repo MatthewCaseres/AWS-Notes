@@ -22,7 +22,7 @@ Here is a chart from the official specification:
 
 ![](./images/CIDR.png)
 
-When we day 0.0.0.0/0 we are specifying all IPv4 addresses. This is can be used in AWS to say that any IP address can access a resource.
+When we say 0.0.0.0/0 we are specifying all IPv4 addresses. This is can be used in AWS to say that any IP address can access a resource.
 
 The term for the number that specifies the IP range in CIDR (i.e. `/24`, `/30`, etc.) is the **netmask**.
 
