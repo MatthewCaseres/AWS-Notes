@@ -1,5 +1,7 @@
 # Auto Scaling
 
+[fdsfds](#what-is-amazon-ec2-auto-scaling)
+
 ## What is Amazon EC2 Auto Scaling?
 
 You create collections of EC2 instances, called Auto Scaling groups. 
