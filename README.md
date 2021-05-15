@@ -4,10 +4,10 @@ You can read the notes on my website - [markdownbooks.com](https://www.markdownb
 
 # AWS Exam Notes
 
-* [EC2](EC2.md)
-* [VPC](VPC.md)
-* [S3](S3.md)
-* [Databases](Databases.md)
-* [AWS Global Infrastructure](Global-Infrastructure.md)
-* [SNS](SNS.md)
-* [SQS](SQS.md)
+* [EC2](source/EC2.md)
+* [VPC](source/VPC.md)
+* [S3](source/S3.md)
+* [Databases](source/Databases.md)
+* [AWS Global Infrastructure](source/Global-Infrastructure.md)
+* [SNS](source/SNS.md)
+* [SQS](source/SQS.md)
