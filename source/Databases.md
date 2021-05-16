@@ -108,12 +108,16 @@ Let's talk features.
 * Scale storage on the fly with no downtime.
 * **Read replicas** - a read-only replica of your database. Serve high-volume read traffic from the read-replica and the primary database for increased overall read capacity.
 
+![RDS Read Replicas Diagram](./images/rds-read-replica.png)
+
 ### Availability and durability
 
 * Backups allow you to restore your database from a previous state. There are two types.
   * Automated backups: Allows you to recover to a point in time from the retention period The retention period can be configured to be up to 35 days.
   * Database snapshots: User initiated snapshots that are stored in S3 and must be manually deleted.
 * You can deploy to multiple availability zones (AZs). This makes a primary instance in one AZ which replicates data to an instance in another AZ. If the infrastructure in your primary AZ fails, RDS will automatically transfer to the replica with minimal downtime.
+
+![RDS Multi-AZ Diagram](./images/rds-multi-az.png)
 
 ### Security
 
