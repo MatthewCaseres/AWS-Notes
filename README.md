@@ -730,8 +730,11 @@ You cannot enable MFA Delete using the AWS Management Console, you must use the 
 *   **S3 One Zone-IA**
     *   Long-lived, infrequently accessed, non-critical data.
     *   Only stored in one AZ, not resilient to loss of AZ.
-    *   Less expensie than Standard-IA.
+    *   Less expensive than Standard-IA.
     *   Yes retrieval fees.
+
+The S3 Standard-IA and S3 One Zone-IA storage classes are suitable for objects larger than 128 KB that you plan to store for at least 30 days. If an object is less than 128 KB, Amazon S3 charges you for 128 KB. If you delete an object before the end of the 30-day minimum storage duration period, you are charged for 30 days.
+
 *   **S3 Intelligent-Tiering**
     *   Use for long-lived data with changing or unknown access patterns.
     *   Automatically puts the object in an optimal storage class based on historical access patterns.
@@ -754,7 +757,7 @@ There are two types of lifecycle transitions.
 
 Amazon S3 supports a waterfall model for transitioning between storage classes, as shown in the following diagram. So you can't transition from a lower step to a higher step.
 
-![](./source/images/S3-transition.png)
+![](./source/images/s3-transition.png)
 
 Before you transition objects from the S3 Standard or S3 Standard-IA storage classes to S3 Standard-IA or S3 One Zone-IA, you must store them at least 30 days in the S3 Standard storage class.
 
@@ -881,12 +884,16 @@ Let's talk features.
 *   Scale storage on the fly with no downtime.
 *   **Read replicas** - a read-only replica of your database. Serve high-volume read traffic from the read-replica and the primary database for increased overall read capacity.
 
+![RDS Read Replicas Diagram](./source/images/rds-read-replica.png)
+
 ### Availability and durability
 
 *   Backups allow you to restore your database from a previous state. There are two types.
     *   Automated backups: Allows you to recover to a point in time from the retention period The retention period can be configured to be up to 35 days.
     *   Database snapshots: User initiated snapshots that are stored in S3 and must be manually deleted.
 *   You can deploy to multiple availability zones (AZs). This makes a primary instance in one AZ which replicates data to an instance in another AZ. If the infrastructure in your primary AZ fails, RDS will automatically transfer to the replica with minimal downtime.
+
+![RDS Multi-AZ Diagram](./source/images/rds-multi-az.png)
 
 ### Security
 
