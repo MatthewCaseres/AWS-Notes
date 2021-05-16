@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Hello world action step
         id: hello
-        uses: MatthewCaseres/github-book-action@v1.8
+        uses: MatthewCaseres/github-book-action@v1.9
         with:
           configPath: './source/00-index.md'
           outputPath: 'README.md'
