@@ -1,7 +1,7 @@
 # AWS Solutions Architect Associate Notes 
 
 <details>
-  <summary>EC2</summary>
+  <summary><a href="#ec2">EC2</a></summary>
     
 * [EC2](#ec2)
 * [What is Amazon EC2](#what-is-amazon-ec2)
