@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Hello world action step
         id: hello
-        uses: MatthewCaseres/github-book-action@v1.8
+        uses: MatthewCaseres/github-book-action@v1.9
         with:
           configPath: './source/00-index.md'
           outputPath: 'README.md'
@@ -17,7 +17,6 @@ jobs:
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
-      - name: thing
-        uses: EndBug/add-and-commit@v7
+      - uses: EndBug/add-and-commit@v7
         with:
             default_author: github_actions
