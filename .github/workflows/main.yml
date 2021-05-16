@@ -17,7 +17,10 @@ jobs:
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
-      - name: thing
-        uses: EndBug/add-and-commit@v7
+#       - name: thing
+#         uses: EndBug/add-and-commit@v7
+#         with:
+#             default_author: github_actions
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-            default_author: github_actions
+          commit_message: Apply php-cs-fixer changes
