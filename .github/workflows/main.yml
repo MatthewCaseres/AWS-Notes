@@ -1,0 +1,21 @@
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Hello world action step
+        id: hello
+        uses: MatthewCaseres/github-book-action@v1.3
+        with:
+          who-to-greet: 'Mona the Octocat'
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
+      - name: thing
+        uses: EndBug/add-and-commit@v7
+        with:
+            default_author: github_actions
