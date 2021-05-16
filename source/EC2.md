@@ -8,13 +8,13 @@ Amazon EC2 lets you run servers in the cloud. Before the cloud you would have a 
 
 When you launch an instance you select an Amazon Machine Image (AMI) which packages up an operating system and any additional software you will need for your server. Below is an image of part of the selection menu, see that we can select a Linux or Windows instance type.
 
-![](./images/AMIs.png)
+![](/source/images/AMIs.png)
 
 If you start with a basic AMI and customize it for your needs, you can take that EC2 instance and make an AMI from it so you don't have to do that work all over again.
 
 Your AMI can only be used by instances in the region it lives in (AMIs are stored in S3). You can easily copy an AMI to another region by right clicking on it.
 
-![](./images/ami-copy.png)
+![](/source/images/ami-copy.png)
 
 [AMI docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html)
 
@@ -81,7 +81,7 @@ Dedicated Hosts and Dedicated Instances can both be used to launch Amazon EC2 in
 
 Here are some differences between the two:
 
-![](./images/EC2-dedicated-comparison.png)
+![](/source/images/EC2-dedicated-comparison.png)
 
 [Dedicated Hosts docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html)
 
@@ -108,7 +108,7 @@ The allocation strategy for the Spot Instances in your Spot Fleet determines how
 
 In the diagram below we see that a spot request launches instances. The spot request has a **request type** which determines if launched instances restart or not upon interruption (if the spot price goes above your max price or if you manually interrupt). Instances launched from a one-time spot request will go away, but instances launched from a persistent spot request will be restarted by the spot request. Thus, if you wish to terminate a persistent spot instance you must first terminate the request. 
 
-![](./images/EC2-spot-flow.png)
+![](/source/images/EC2-spot-flow.png)
 
 [Spot Instance request docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html)
 
@@ -139,7 +139,7 @@ EC2 tries to spread out your instances to minimize correlated failures. You can 
 
 Use this for low network latency and high network throughput. Correlated failures are a risk.
 
-![EC2 Placement Cluster](./images/ec2-placement-cluster.png)
+![EC2 Placement Cluster](/source/images/ec2-placement-cluster.png)
 
 ### Partition
 
@@ -147,7 +147,7 @@ Use this for distributed data processing. If a rack fails a group of instances m
 
 You can only have 7 partitions per AZ, so if there are three AZ in a region we can have 21 partitions. Within each partition you can have as many instances as allowed by your account.
 
-![EC2 Placement Partition](./images/ec2-placement-partition.png)
+![EC2 Placement Partition](/source/images/ec2-placement-partition.png)
 
 ### Spread
 
@@ -155,7 +155,7 @@ Each instance is on its own rack. Each rack has its own power source and network
 
 You can only have 7 *instances* per AZ, so if there are six AZ in a region we can have 42 partitions. Within each partition you can have many instances.
 
-![EC2 Placement Spread](./images/ec2-placement-partition.png)
+![EC2 Placement Spread](/source/images/ec2-placement-partition.png)
 
 [Placement Groups docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html)
 

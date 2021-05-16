@@ -6,7 +6,7 @@ IP addresses specify the location of devices on the internet. IPv4 is a type of 
 
 IP addresses are represented in "dot decimal" notation. There are four numbers 0-255 separated by decimals. So `120.247.236.38` is an IP address. IP addresses can be broken up into two parts, the **network prefix** which specifies the location of the network, and the **host identifier** which specifies a device on the network.
 
-![IPv4 address in dotted-decimal notation](./images/ipv4-dotdecimal.png)
+![IPv4 address in dotted-decimal notation](/source/images/ipv4-dotdecimal.png)
 
 So maybe the network is specified by `120.247.236` and the host address is specified by `.38`. But how do we know where to split the address?
 
@@ -20,7 +20,7 @@ If we had something like `120.247.236.38/32` then every bit in the IP address is
 
 Here is a chart from the official specification:
 
-![](./images/CIDR.png)
+![](/source/images/CIDR.png)
 
 When we day 0.0.0.0/0 we are specifying all IPv4 addresses. This is can be used in AWS to say that any IP address can access a resource.
 

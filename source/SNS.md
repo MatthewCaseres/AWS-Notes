@@ -11,7 +11,7 @@ Subscribers to the topic can be SQS queues, HTTP, email, mobile push notificatio
 
 A common use case is sending messages to many different subscribers. Having an SNS topic means our publisher only has to send data to one place, the SNS topic is used to "fanout" the message.
 
-![SNS use case](./images/sns-use.png)
+![SNS use case](/source/images/sns-use.png)
 
 You can use the fanout pattern to replicate data sent to your production environment with your test environment, this way you can test your application with data received from your production application.
 

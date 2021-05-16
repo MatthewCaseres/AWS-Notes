@@ -55,7 +55,7 @@ When scaling out you might want to run a script to download and install some sof
 
 When terminating an instance you might want to perform some clean up actions.
 
-![ASG Lifecycle Hooks](./images/asg-lifecycle.png)
+![ASG Lifecycle Hooks](/source/images/asg-lifecycle.png)
 
 ## Health Checks
 

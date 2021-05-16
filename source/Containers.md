@@ -8,7 +8,7 @@ Images are typically built from a Dockerfile, which is a plaintext file that spe
 
 Multiple docker containers can run on an operating system using docker.
 
-![Docker](./images/container-docker.png)
+![Docker](/source/images/container-docker.png)
 
 ### Dockerfiles, Images, Containers
 
@@ -20,7 +20,7 @@ A **dockerfile** specifies the resources for a **docker image**, you *build* the
 
 Container images are stored in a container registry. The container images that ECS runs to create containers come from a container registry. Some popular registry options are Amazon ECR, Docker Hub, GitHub Container Registry, or self-hosted.
 
-![Docker](./images/container-registry.png)
+![Docker](/source/images/container-registry.png)
 
 ## What is Amazon Elatic Container Service?
 
@@ -28,7 +28,7 @@ Amazon Elastic Container Service is for managing containers on AWS. There are tw
 
 Here is a diagram.
 
-![Docker](./images/ecs.png)
+![Docker](/source/images/ecs.png)
 
 Let's explain what all this means.
 

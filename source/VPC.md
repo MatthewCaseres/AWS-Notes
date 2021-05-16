@@ -24,7 +24,7 @@ When you divide an IP network into multiple parts, each part is called a subnet.
 
 The number of available IPv4 addresses in your subnet's CIDR block is not exactly what you think it would be.
 
-![IPv4](./images/IPv4.png)
+![IPv4](/source/images/IPv4.png)
 
 In a `/24` IPv4 we would expect for there to be 256 addresses, 2^(32-24) = 2^8 = 256. The reason there are only 251 available is that AWS reserves some of the IP addresses for it's own use.
 
@@ -50,7 +50,7 @@ Every subnet needs to be associated with a route table. This route table will di
 
 Here is a route table for a VPC with CIDR block `172.31.0.0/16`.
 
-![](./images/route-table.png)
+![](/source/images/route-table.png)
 
 This route table is saying that traffic to the VPC (`172.31.0.0/16`) is local to the VPC and that traffic elsewhere (`0.0.0.0/0`) goes to `igw-d2b99dba` (this is an **internet gateway**, we discuss this later).
 
@@ -58,7 +58,7 @@ This route table is saying that traffic to the VPC (`172.31.0.0/16`) is local to
 
 At the beginning of this section we said that every subnet needs to be associated with a route table, but our route table didn't say anything about any subnets. This is explained by the following image:
 
-![](./images/route-subnets.png)
+![](/source/images/route-subnets.png)
 
 There is a **main route table** which is created when a new VPC is created. You do not need to explicitly associate a new subnet with a route table, there is an automatic association with the main route table.
 
@@ -70,19 +70,19 @@ Let's go over an example on the main route table from the AWS documentation.
 
 Suppose you have two subnets and two route tables. Initially, both subnets have an implicit association with Route Table A, the main route table. We want to change both subnets to be associated with route table B.
 
-![](./images/main-route-1.png)
+![](/source/images/main-route-1.png)
 
 We can create an explicit association between subnet 2 and Route Table B.
 
-![](./images/main-route-2.png)
+![](/source/images/main-route-2.png)
 
 We can change the main route table from A to B, which will update the implicit association of subnet 1 from A to B.
 
-![](./images/main-route-3.png)
+![](/source/images/main-route-3.png)
 
 We can delete the explicit association between subnet 2 and table B, and it will still have an implicit association with the route table.
 
-![](./images/main-route-4.png)
+![](/source/images/main-route-4.png)
 
 A route table can be associated with multiple subnets, but a subnet cannot be associated with multiple route tables.
 
@@ -92,7 +92,7 @@ A route table can be associated with multiple subnets, but a subnet cannot be as
 
 Instances that have a public IP address in a subnet can connect to the internet we need an internet gateway. Let's look at a route table again to see how this works: 
 
-![](./images/route-table.png)
+![](/source/images/route-table.png)
 
 Traffic going to the private IPs of the CIDR block for the VPC stay `local` to the VPC. All other traffic goes to `igw-d2b99dba`, which is an internet gateway that will take this traffic to the internet. If this rule is not in the route table, then traffic will not get routed to the internet gateway even if there is a route table.
 
@@ -121,7 +121,7 @@ Here is how it works:
 3. The NAT instance sends this request to the public IP and receives a response back.
 4. The NAT instance sends the response back to the database servers on the private subnet at `10.0.1.0/24`.
 
-![](./images/NAT-instance.png)
+![](/source/images/NAT-instance.png)
 
 The NAT instance has an elastic IP (an IP address that doesn't change), this is required.
 
@@ -137,7 +137,7 @@ The NAT gateway is redundant within each availability zone, but if the availabil
 
 A comparison of the NAT gateways and instances from the AWS documentation:
 
-![](./images/NAT-comparison.png)
+![](/source/images/NAT-comparison.png)
 
 [NAT docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat.html)
 
@@ -214,7 +214,7 @@ You can privately connect to AWS services using VPC endpoints. You can build you
 
 In the diagram below our VPC endpoint service is in VPC B. The dashed line around it is the service provider, `vpce-svc-1234`. The ENI of subnet A can access the network load balancer using an interface endpoint. If the network load balancer has instances spread across multiple availability zones then the solution will be fault-tolerant.
 
-![](./images/VPC-endpoint-services.png)
+![](/source/images/VPC-endpoint-services.png)
 
 [VPC endpoint services docs](https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html)
 
@@ -222,11 +222,11 @@ In the diagram below our VPC endpoint service is in VPC B. The dashed line aroun
 
 VPC peering is a connection between two VPCs that allows you to route traffic between them privately. It allows you to communicate between different VPCs as if they were in the same VPC. VPCs can be peered within your own account or across different accounts. The VPCs must have non-overlapping CIDR blocks.
 
-![](./images/VPC-peer-1.png)
+![](/source/images/VPC-peer-1.png)
 
 VPC peering is not transitive. In the image below, VPC A is connected to both VPC B and VPC C, but **VPC B is not connected to VPC C**.
 
-![](./images/VPC-peer-transitive.png)
+![](/source/images/VPC-peer-transitive.png)
 
 When peering VPCs you need to update your route tables to route traffic in the appropriate private IP range to the VPC peering connection.
 
@@ -248,7 +248,7 @@ The diagram below shows the connection between an AWS VPC and an on-premises net
 * **Virtual private gateway**: A VPN concentrator (this just means that it sets up a secure connection) on the AWS side.
 * **Customer gateway**: A physical device that you set up on-premises to connect with AWS.
 
-![](./images/VPN-single.png)
+![](/source/images/VPN-single.png)
 
 [//]: # (https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html)
 [//]: # (https://docs.aws.amazon.com/vpn/latest/s2svpn/Examples.html)
@@ -259,7 +259,7 @@ The diagram below shows the connection between an AWS VPC and an on-premises net
 
 VPN cloudhub allows for multiple site-to-site connections and for communications between your sites. Sites must have non-overlapping IP ranges.
 
-![](./images/VPN-cloudhub.png)
+![](/source/images/VPN-cloudhub.png)
 
 [VPN CloudHub docs](https://docs.aws.amazon.com/vpn/latest/s2svpn/VPN_CloudHub.html)
 
@@ -273,7 +273,7 @@ Suppose we want to connect many VPC, direct connect, and VPNs together. VPC peer
 
 With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to eachother. In the diagram below everyone can talk to eachother because the transit gateway allow transitive connection.
 
-![](./images/VPC-transit-gateway.png)
+![](/source/images/VPC-transit-gateway.png)
 
 Transit gateways support IP multicast. This means that you can send multiple IP addresses at once to a transit gateway and it will communicate to them all. This is not supported in our other routing methods.
 
@@ -283,7 +283,7 @@ Transit gateways support IP multicast. This means that you can send multiple IP 
 
 AWS direct connect allows you to connect to AWS while bypassing your internet service provider. This is done to improve bandwidth and latency for things like working with large data sets or real-time data feeds.
 
-![](./images/VPC-direct.png)
+![](/source/images/VPC-direct.png)
 
 [Direct Connect docs](https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html)
 
@@ -298,7 +298,7 @@ Flow logs can help you -
 
 You can create flow logs at varying levels of granularity: for a VPC, subnet, or a network interface. If you create a flow log for a subnet or VPC all the ENIs in the VPC/subnet will be monitored. You can write flow logs either to an S3 bucket (a storage service) or to Cloudwatch (a cloud monitoring service).
 
-![](./images/VPC-flow-logs.png)
+![](/source/images/VPC-flow-logs.png)
 
 [Flow logs docs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html)
 
