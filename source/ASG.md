@@ -8,7 +8,7 @@ You create collections of EC2 instances, called Auto Scaling groups.
 * Specify the **maximum** number of instances in each Auto Scaling group, and Amazon EC2 Auto Scaling ensures that your group never goes above this size. 
 * If you specify the **desired capacity**, either when you create the group or at any time thereafter, Amazon EC2 Auto Scaling ensures that your group has this many instances.
 
-![Diagram of auto-scaling group](/source/images/asg.png)
+![Diagram of auto-scaling group](./images/asg.png)
 
 [What is auto-scaling docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html)
 
@@ -55,7 +55,7 @@ When scaling out you might want to run a script to download and install some sof
 
 When terminating an instance you might want to perform some clean up actions.
 
-![ASG Lifecycle Hooks](/source/images/asg-lifecycle.png)
+![ASG Lifecycle Hooks](./images/asg-lifecycle.png)
 
 ## Health Checks
 

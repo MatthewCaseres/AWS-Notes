@@ -6,7 +6,7 @@ EBS lets EC2 instances have persistent storage that doesn't go away when the ins
 
 The EBS volumes are not on the same host computer but instead are attached by the network. However, EBS volumes are specific to availability zone. The average latency between EC2 instances and EBS is single digit milliseconds.
 
-![](/source/images/ec2-storage-partial.png)
+![](./images/ec2-storage-partial.png)
 
 ## Snapshots
 
