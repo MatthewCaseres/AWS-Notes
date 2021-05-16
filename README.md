@@ -1,13 +1,112 @@
 # AWS Solutions Architect Associate Notes 
 
+<details>
+  <summary>EC2</summary>
+    
 * [EC2](#ec2)
+* [What is Amazon EC2](#what-is-amazon-ec2)
+* [AMI](#ami)
+* [Instance IP Addressing](#instance-ip-addressing)
+* [User data scripts](#user-data-scripts)
+* [Instance purchasing options](#instance-purchasing-options)
+* [More on Spot Instances](#more-on-spot-instances)
+* [EC2 Instance Types](#ec2-instance-types)
+* [Placement groups](#placement-groups)
+* [Network Interfaces](#network-interfaces)
+</details>
+
+<details>
+  <summary>VPC</summary>
+    
 * [VPC](#vpc)
+* [VPC Basics](#vpc-basics)
+* [Subnet Sizing](#subnet-sizing)
+* [Route Tables](#route-tables)
+* [Internet Gateway](#internet-gateway)
+* [NAT devices](#nat-devices)
+* [Egress-only internet gateways](#egress-only-internet-gateways)
+* [Security Groups](#security-groups)
+* [Network ACL (Network Access Control List)](#network-acl-network-access-control-list)
+* [VPC Endpoints](#vpc-endpoints)
+* [AWS PrivateLink (VPC endpoint services)](#aws-privatelink-vpc-endpoint-services)
+* [VPC Peering](#vpc-peering)
+* [Bastion Hosts](#bastion-hosts)
+* [Site to Site VPN Connection](#site-to-site-vpn-connection)
+* [VPN CloudHub](#vpn-cloudhub)
+* [Transit Gateway](#transit-gateway)
+* [Direct Connect](#direct-connect)
+* [VPC Flow Logs](#vpc-flow-logs)
+</details>
+
+<details>
+  <summary>S3</summary>
+    
 * [S3](#s3)
+* [Buckets](#buckets)
+* [Objects](#objects)
+* [Data Consistency](#data-consistency)
+* [Encryption](#encryption)
+* [Managing Access](#managing-access)
+* [CORS](#cors)
+* [Versioning](#versioning)
+* [Storage Classes](#storage-classes)
+* [Lifecycle Transitions](#lifecycle-transitions)
+* [Optimizing Performance](#optimizing-performance)
+</details>
+
+<details>
+  <summary>Databases</summary>
+    
 * [Databases](#databases)
+* [What is a database?](#what-is-a-database)
+* [Amazon Relational Database Service (RDS)](#amazon-relational-database-service-rds)
+* [Aurora](#aurora)
+* [Amazon DynamoDB](#amazon-dynamodb)
+* [Amazon Redshift](#amazon-redshift)
+* [Elasticache](#elasticache)
+* [Other Databases](#other-databases)
+</details>
+
+<details>
+  <summary>AWS Global Infrastructure</summary>
+    
 * [AWS Global Infrastructure](#aws-global-infrastructure)
+* [Traditional Data Centers](#traditional-data-centers)
+* [AWS vs. Traditional Data Centers](#aws-vs-traditional-data-centers)
+* [Global Infrastructure](#global-infrastructure)
+</details>
+
+<details>
+  <summary>Amazon Simple Notification Service (SNS)</summary>
+    
 * [Amazon Simple Notification Service (SNS)](#amazon-simple-notification-service-sns)
+* [What is SNS?](#what-is-sns)
+* [Fanout pattern](#fanout-pattern)
+* [FIFO](#fifo)
+* [Message Filtering](#message-filtering)
+</details>
+
+<details>
+  <summary>Amazon Simple Queue Service (SQS)</summary>
+    
 * [Amazon Simple Queue Service (SQS)](#amazon-simple-queue-service-sqs)
+* [What is SQS?](#what-is-sqs)
+* [Standard vs. FIFO](#standard-vs-fifo)
+* [Configuration](#configuration)
+* [Access Policy](#access-policy)
+* [Server-side encryption](#server-side-encryption)
+* [Dead-letter queue](#dead-letter-queue)
+</details>
+
+<details>
+  <summary>Amazon Kinesis</summary>
+    
 * [Amazon Kinesis](#amazon-kinesis)
+* [What is Kinesis?](#what-is-kinesis)
+* [Kinesis Data Streams](#kinesis-data-streams)
+* [Kinesis Data Firehose](#kinesis-data-firehose)
+</details>
+
 
 # EC2
 
@@ -19,13 +118,13 @@ Amazon EC2 lets you run servers in the cloud. Before the cloud you would have a 
 
 When you launch an instance you select an Amazon Machine Image (AMI) which packages up an operating system and any additional software you will need for your server. Below is an image of part of the selection menu, see that we can select a Linux or Windows instance type.
 
-![](./source/images/AMIs.png)
+![](/source/images/AMIs.png)
 
 If you start with a basic AMI and customize it for your needs, you can take that EC2 instance and make an AMI from it so you don't have to do that work all over again.
 
 Your AMI can only be used by instances in the region it lives in (AMIs are stored in S3). You can easily copy an AMI to another region by right clicking on it.
 
-![](./source/images/ami-copy.png)
+![](/source/images/ami-copy.png)
 
 [AMI docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html)
 
@@ -92,7 +191,7 @@ Dedicated Hosts and Dedicated Instances can both be used to launch Amazon EC2 in
 
 Here are some differences between the two:
 
-![](./source/images/EC2-dedicated-comparison.png)
+![](/source/images/EC2-dedicated-comparison.png)
 
 [Dedicated Hosts docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html)
 
@@ -119,7 +218,7 @@ The allocation strategy for the Spot Instances in your Spot Fleet determines how
 
 In the diagram below we see that a spot request launches instances. The spot request has a **request type** which determines if launched instances restart or not upon interruption (if the spot price goes above your max price or if you manually interrupt). Instances launched from a one-time spot request will go away, but instances launched from a persistent spot request will be restarted by the spot request. Thus, if you wish to terminate a persistent spot instance you must first terminate the request. 
 
-![](./source/images/EC2-spot-flow.png)
+![](/source/images/EC2-spot-flow.png)
 
 [Spot Instance request docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html)
 
@@ -150,7 +249,7 @@ EC2 tries to spread out your instances to minimize correlated failures. You can 
 
 Use this for low network latency and high network throughput. Correlated failures are a risk.
 
-![EC2 Placement Cluster](./source/images/ec2-placement-cluster.png)
+![EC2 Placement Cluster](/source/images/ec2-placement-cluster.png)
 
 ### Partition
 
@@ -158,7 +257,7 @@ Use this for distributed data processing. If a rack fails a group of instances m
 
 You can only have 7 partitions per AZ, so if there are three AZ in a region we can have 21 partitions. Within each partition you can have as many instances as allowed by your account.
 
-![EC2 Placement Partition](./source/images/ec2-placement-partition.png)
+![EC2 Placement Partition](/source/images/ec2-placement-partition.png)
 
 ### Spread
 
@@ -166,7 +265,7 @@ Each instance is on its own rack. Each rack has its own power source and network
 
 You can only have 7 *instances* per AZ, so if there are six AZ in a region we can have 42 partitions. Within each partition you can have many instances.
 
-![EC2 Placement Spread](./source/images/ec2-placement-partition.png)
+![EC2 Placement Spread](/source/images/ec2-placement-partition.png)
 
 [Placement Groups docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html)
 
@@ -213,7 +312,7 @@ When you divide an IP network into multiple parts, each part is called a subnet.
 
 The number of available IPv4 addresses in your subnet's CIDR block is not exactly what you think it would be.
 
-![IPv4](./source/images/IPv4.png)
+![IPv4](/source/images/IPv4.png)
 
 In a `/24` IPv4 we would expect for there to be 256 addresses, 2^(32-24) = 2^8 = 256. The reason there are only 251 available is that AWS reserves some of the IP addresses for it's own use.
 
@@ -239,7 +338,7 @@ Every subnet needs to be associated with a route table. This route table will di
 
 Here is a route table for a VPC with CIDR block `172.31.0.0/16`.
 
-![](./source/images/route-table.png)
+![](/source/images/route-table.png)
 
 This route table is saying that traffic to the VPC (`172.31.0.0/16`) is local to the VPC and that traffic elsewhere (`0.0.0.0/0`) goes to `igw-d2b99dba` (this is an **internet gateway**, we discuss this later).
 
@@ -247,7 +346,7 @@ This route table is saying that traffic to the VPC (`172.31.0.0/16`) is local to
 
 At the beginning of this section we said that every subnet needs to be associated with a route table, but our route table didn't say anything about any subnets. This is explained by the following image:
 
-![](./source/images/route-subnets.png)
+![](/source/images/route-subnets.png)
 
 There is a **main route table** which is created when a new VPC is created. You do not need to explicitly associate a new subnet with a route table, there is an automatic association with the main route table.
 
@@ -259,19 +358,19 @@ Let's go over an example on the main route table from the AWS documentation.
 
 Suppose you have two subnets and two route tables. Initially, both subnets have an implicit association with Route Table A, the main route table. We want to change both subnets to be associated with route table B.
 
-![](./source/images/main-route-1.png)
+![](/source/images/main-route-1.png)
 
 We can create an explicit association between subnet 2 and Route Table B.
 
-![](./source/images/main-route-2.png)
+![](/source/images/main-route-2.png)
 
 We can change the main route table from A to B, which will update the implicit association of subnet 1 from A to B.
 
-![](./source/images/main-route-3.png)
+![](/source/images/main-route-3.png)
 
 We can delete the explicit association between subnet 2 and table B, and it will still have an implicit association with the route table.
 
-![](./source/images/main-route-4.png)
+![](/source/images/main-route-4.png)
 
 A route table can be associated with multiple subnets, but a subnet cannot be associated with multiple route tables.
 
@@ -281,7 +380,7 @@ A route table can be associated with multiple subnets, but a subnet cannot be as
 
 Instances that have a public IP address in a subnet can connect to the internet we need an internet gateway. Let's look at a route table again to see how this works: 
 
-![](./source/images/route-table.png)
+![](/source/images/route-table.png)
 
 Traffic going to the private IPs of the CIDR block for the VPC stay `local` to the VPC. All other traffic goes to `igw-d2b99dba`, which is an internet gateway that will take this traffic to the internet. If this rule is not in the route table, then traffic will not get routed to the internet gateway even if there is a route table.
 
@@ -310,7 +409,7 @@ Here is how it works:
 3. The NAT instance sends this request to the public IP and receives a response back.
 4. The NAT instance sends the response back to the database servers on the private subnet at `10.0.1.0/24`.
 
-![](./source/images/NAT-instance.png)
+![](/source/images/NAT-instance.png)
 
 The NAT instance has an elastic IP (an IP address that doesn't change), this is required.
 
@@ -326,7 +425,7 @@ The NAT gateway is redundant within each availability zone, but if the availabil
 
 A comparison of the NAT gateways and instances from the AWS documentation:
 
-![](./source/images/NAT-comparison.png)
+![](/source/images/NAT-comparison.png)
 
 [NAT docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat.html)
 
@@ -403,7 +502,7 @@ You can privately connect to AWS services using VPC endpoints. You can build you
 
 In the diagram below our VPC endpoint service is in VPC B. The dashed line around it is the service provider, `vpce-svc-1234`. The ENI of subnet A can access the network load balancer using an interface endpoint. If the network load balancer has instances spread across multiple availability zones then the solution will be fault-tolerant.
 
-![](./source/images/VPC-endpoint-services.png)
+![](/source/images/VPC-endpoint-services.png)
 
 [VPC endpoint services docs](https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html)
 
@@ -411,11 +510,11 @@ In the diagram below our VPC endpoint service is in VPC B. The dashed line aroun
 
 VPC peering is a connection between two VPCs that allows you to route traffic between them privately. It allows you to communicate between different VPCs as if they were in the same VPC. VPCs can be peered within your own account or across different accounts. The VPCs must have non-overlapping CIDR blocks.
 
-![](./source/images/VPC-peer-1.png)
+![](/source/images/VPC-peer-1.png)
 
 VPC peering is not transitive. In the image below, VPC A is connected to both VPC B and VPC C, but **VPC B is not connected to VPC C**.
 
-![](./source/images/VPC-peer-transitive.png)
+![](/source/images/VPC-peer-transitive.png)
 
 When peering VPCs you need to update your route tables to route traffic in the appropriate private IP range to the VPC peering connection.
 
@@ -437,7 +536,7 @@ The diagram below shows the connection between an AWS VPC and an on-premises net
 * **Virtual private gateway**: A VPN concentrator (this just means that it sets up a secure connection) on the AWS side.
 * **Customer gateway**: A physical device that you set up on-premises to connect with AWS.
 
-![](./source/images/VPN-single.png)
+![](/source/images/VPN-single.png)
 
 [//]: # (https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html)
 [//]: # (https://docs.aws.amazon.com/vpn/latest/s2svpn/Examples.html)
@@ -448,7 +547,7 @@ The diagram below shows the connection between an AWS VPC and an on-premises net
 
 VPN cloudhub allows for multiple site-to-site connections and for communications between your sites. Sites must have non-overlapping IP ranges.
 
-![](./source/images/VPN-cloudhub.png)
+![](/source/images/VPN-cloudhub.png)
 
 [VPN CloudHub docs](https://docs.aws.amazon.com/vpn/latest/s2svpn/VPN_CloudHub.html)
 
@@ -462,7 +561,7 @@ Suppose we want to connect many VPC, direct connect, and VPNs together. VPC peer
 
 With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to eachother. In the diagram below everyone can talk to eachother because the transit gateway allow transitive connection.
 
-![](./source/images/VPC-transit-gateway.png)
+![](/source/images/VPC-transit-gateway.png)
 
 Transit gateways support IP multicast. This means that you can send multiple IP addresses at once to a transit gateway and it will communicate to them all. This is not supported in our other routing methods.
 
@@ -472,7 +571,7 @@ Transit gateways support IP multicast. This means that you can send multiple IP 
 
 AWS direct connect allows you to connect to AWS while bypassing your internet service provider. This is done to improve bandwidth and latency for things like working with large data sets or real-time data feeds.
 
-![](./source/images/VPC-direct.png)
+![](/source/images/VPC-direct.png)
 
 [Direct Connect docs](https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html)
 
@@ -487,7 +586,7 @@ Flow logs can help you -
 
 You can create flow logs at varying levels of granularity: for a VPC, subnet, or a network interface. If you create a flow log for a subnet or VPC all the ENIs in the VPC/subnet will be monitored. You can write flow logs either to an S3 bucket (a storage service) or to Cloudwatch (a cloud monitoring service).
 
-![](./source/images/VPC-flow-logs.png)
+![](/source/images/VPC-flow-logs.png)
 
 [Flow logs docs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html)
 
@@ -528,7 +627,7 @@ Objects can be up to 5TB in size but you can only upload 5GB at a time so you wi
 
 Folders can be represented within S3 - 
 
-![](./source/images/s3-folder.png)
+![](/source/images/s3-folder.png)
 
 S3 only supports buckets and objects (the files are a lie!) and this filesystem interface is a convenience provided to users of the console.
 
@@ -679,7 +778,7 @@ There are two types of lifecycle transitions.
 
 Amazon S3 supports a waterfall model for transitioning between storage classes, as shown in the following diagram. So you can't transition from a lower step to a higher step.
 
-![](./source/images/S3-transition.png)
+![](/source/images/S3-transition.png)
 
 Before you transition objects from the S3 Standard or S3 Standard-IA storage classes to S3 Standard-IA or S3 One Zone-IA, you must store them at least 30 days in the S3 Standard storage class.
 
@@ -713,19 +812,19 @@ Consider an application like Instagram. There are users. Users can take photos. 
 
 The user table contains our users. If we have two users, one cat and one dog, the user table might look like this:
 
-![](./source/images/rdbms-users.png)
+![](/source/images/rdbms-users.png)
 
 Suppose we have one photo, a selfie uploaded by the cat. Notice that we use the `id` from the user table to indicate the owner of the photo. This is why it is a **relational** database.
 
-![](./source/images/rdbms-photos.png)
+![](/source/images/rdbms-photos.png)
 
 The user with id 2 likes the photo with id 1, the dog liked the cat's selfie.
 
-![](./source/images/rdbms-likes.png)
+![](/source/images/rdbms-likes.png)
 
 Here is a rough diagram of the way things work. ER diagrams are outside the scope of discussion so some conventions are not followed.
 
-![](./source/images/rdbms-relational.svg)
+![](/source/images/rdbms-relational.svg)
 
 ### What is a NoSQL database?
 
@@ -769,11 +868,11 @@ Relational databases can be row oriented or column oriented.
 
 Row oriented databases store entries of a row in adjacent memory locations. This makes it easy to insert/delete rows for transactional (OLTP) workloads.
 
-![](./source/images/oltp-row.png)
+![](/source/images/oltp-row.png)
 
 Column oriented databases store entries of a column in adjacent memory locations. Analytical workloads (OLAP) often involve operations on a column like summing it or grouping it, so this architecture is optimized for analytical workloads.
 
-![](./source/images/olap-col.png)
+![](/source/images/olap-col.png)
 
 Amazon Redshift is column oriented, databases on RDS are row oriented. You can learn more about Redshift architecture [here](https://docs.aws.amazon.com/redshift/latest/dg/c_columnar_storage_disk_mem_mgmnt.html)
 
@@ -872,7 +971,7 @@ We don't have to worry about availability or fault tolerance, they are built rig
 
 DynamoDB Accelerator (DAX) is an in-memory cache that improves read performance up to 10x, bringing read times from single digit millisecond to microseconds.
 
-![DynamoDB DAX Diagram](./source/images/dynamo-dax.png)
+![DynamoDB DAX Diagram](/source/images/dynamo-dax.png)
 
 DynamoDB global tables replicate tables across regions to scale capacity and allow local access in selected regions for improved performance.
 
@@ -902,7 +1001,7 @@ You load data into Redshift tables, and then you do parallel processing on the l
 
 The leader node sends instructions to the compute nodes which perform the instructions in parallel on data from the client applications.
 
-![](./source/images/redshift.png)
+![](/source/images/redshift.png)
 
 You can query live databases using federated queries. You can query from S3 without loading into Redshift tables using Amazon Redshift Spectrum.
 
@@ -970,7 +1069,7 @@ Subscribers to the topic can be SQS queues, HTTP, email, mobile push notificatio
 
 A common use case is sending messages to many different subscribers. Having an SNS topic means our publisher only has to send data to one place, the SNS topic is used to "fanout" the message.
 
-![SNS use case](./source/images/sns-use.png)
+![SNS use case](/source/images/sns-use.png)
 
 You can use the fanout pattern to replicate data sent to your production environment with your test environment, this way you can test your application with data received from your production application.
 
