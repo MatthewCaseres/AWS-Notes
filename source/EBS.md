@@ -8,6 +8,22 @@ The EBS volumes are not on the same host computer but instead are attached by th
 
 ![](./images/ec2-storage-partial.png)
 
+## Instance Types
+
+The main instance types are:
+
+* Solid state drives (SSD) — Optimized for transactional workloads involving frequent read/write operations with small I/O size, where the dominant performance attribute is IOPS. The two types of SSD backed volumes are:
+  * **General Purpose SSD** (**gp2** and **gp3**): a balance of price and performance. We recommend these volumes for most workloads.
+  * **Provisioned IOPS SSD** (**io1** and **io2**) - Provides high performance for mission-critical, low-latency, or high-throughput workloads.
+    * Amazon EBS Multi-Attach enables you to attach a single Provisioned IOPS SSD (io1 or io2) volume to multiple instances that are in the same Availability Zone.
+    * Multi-attach only works for Nitro-enabled instances. Nitro is providing some sort of hardware support. Up to 16 instances.
+    * EBS Block Express is the next generation of Amazon EBS storage server architecture. It has been built for the purpose of meeting the performance requirements of the most demanding I/O intensive applications that run on Nitro-based Amazon EC2 instances. io2 Block Express volumes are suited for workloads that benefit from a single volume that provides sub-millisecond latency, and supports higher IOPS, higher throughput, and larger capacity than io2 volumes.
+* Hard disk drives (HDD) — Optimized for large streaming workloads where the dominant performance attribute is throughput. The two types of HDD backed volumes are:
+  * **Throughput Optimized HDD (st1)**  — A low-cost HDD designed for frequently accessed, throughput-intensive workloads. 
+  * **Cold HDD (sc1)** — The lowest-cost HDD design for less frequently accessed workloads.
+
+  <!-- TODO: Discuss IOPS in more precision -->
+
 ## Snapshots
 
 You can create point-in-time snapshots of EBS volumes, which are persisted to Amazon S3. Snapshots protect data for long-term durability, and they can be used as the starting point for new EBS volumes. The same snapshot can be used to instantiate as many volumes as you wish.
@@ -26,17 +42,7 @@ When you create an encrypted EBS volume and attach it to a supported instance ty
 EBS encrypts your volume with a data key using the industry-standard AES-256 algorithm.
 
 
-## Instance Types
 
-The main instance types are:
-
-* Solid state drives (SSD) — Optimized for transactional workloads involving frequent read/write operations with small I/O size, where the dominant performance attribute is IOPS. The two types of SSD backed volumes are:
-  * **General Purpose SSD** (**gp2** and **gp3**): a balance of price and performance. We recommend these volumes for most workloads.
-  * **Provisioned IOPS SSD** (**io1** and **io2**) - Provides high performance for mission-critical, low-latency, or high-throughput workloads.
-    * Amazon EBS Multi-Attach enables you to attach a single Provisioned IOPS SSD (io1 or io2) volume to multiple instances that are in the same Availability Zone.
-* Hard disk drives (HDD) — Optimized for large streaming workloads where the dominant performance attribute is throughput. The two types of HDD backed volumes are:
-  * **Throughput Optimized HDD (st1)**  — A low-cost HDD designed for frequently accessed, throughput-intensive workloads. 
-  * **Cold HDD (sc1)** — The lowest-cost HDD design for less frequently accessed workloads.
 
 
 [EBS Volume Types docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html)
