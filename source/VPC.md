@@ -6,6 +6,10 @@ The VPC (Virtual Private Cloud) is how networking is done in the AWS cloud. The 
 
 VPCs are specific to a region, and a single VPC will span all the availability zones in a region. You can make subnets of a VPC, subnets are specific to availability zones.
 
+<!-- TODO: subnets within -->
+
+![](./images/vpc-az.png)
+
 When you create a VPC, you must associate an IPv4 CIDR block for it. The CIDR block must contain between 16 and 65,536 IP addresses (netmasks of `/28` and `/16` respectively). If you see a question asking about CIDR block sizes know that it is between `/28` and `/16`.
 
 Your CIDR block must be in the private IP ranges:
