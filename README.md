@@ -313,7 +313,7 @@ The 5 missing IP addresses are reserved as follows:
 *   `172.31.80.0` is used as the network address
 *   `172.31.80.1` is reserved for the VPC router
 *   `172.31.80.2` is reserved for the DNS
-*   `172.31.80.2` is reserved by AWS for future use
+*   `172.31.80.3` is reserved by AWS for future use
 *   `172.31.80.255` is the network broadcast address. AWS does not support broadcast so this is reserved.
 
 If a question asks what IP addresses you can use, the first 4 IP addresses are reserved, as well as the last one. Be able to calculate the CIDR range for a simple example like 10.0.0.0/24.
