@@ -376,7 +376,8 @@ Instances that have a public IP address in a subnet can connect to the internet 
 
 Traffic going to the private IPs of the CIDR block for the VPC stay `local` to the VPC. All other traffic goes to `igw-d2b99dba`, which is an internet gateway that will take this traffic to the internet. If this rule is not in the route table, then traffic will not get routed to the internet gateway even if there is a route table.
 
-The internet gateway horizontally scales, is redundant, and is highly available. AWS manages these things. You do not need to worry about availability or scaleability of your internet gateways.
+The internet gateway horizontally
+s, is redundant, and is highly available. AWS manages these things. You do not need to worry about availability or scalability of your internet gateways.
 
 [Internet Gateway docs](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html)
 
