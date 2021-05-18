@@ -461,7 +461,7 @@ Network ACLs are also a type of firewall. Here are some differences between the 
 
 Here are some similarities between the network ACL and the security group.
 
-*   They both control acccess within a VPC.
+*   They both control access within a VPC.
 *   All subnets must be associated with a network ACL, just like all EC2 instances must have a security group.
 *   You can associate a network ACL with multiple subnets, just like a security group can be associated with multiple EC2 instances.
 *   VPCs come with a default network ACL, just like EC2 instances come with a default security group.
