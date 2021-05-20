@@ -29,10 +29,16 @@
 * [AWS PrivateLink (VPC endpoint services)](#aws-privatelink-vpc-endpoint-services)
 * [VPC Peering](#vpc-peering)
 * [Bastion Hosts](#bastion-hosts)
+* [What is a VPN?](#what-is-a-vpn)
 * [Site to Site VPN Connection](#site-to-site-vpn-connection)
-* [VPN CloudHub](#vpn-cloudhub)
 * [Transit Gateway](#transit-gateway)
+</details>
+
+<details>
+  <summary><a href="#with-the-transit-gateway-we-connect-all-of-the-vpcs-to-the-transit-gateway-and-they-can-all-talk-to-each-other-in-the-diagram-below-everyone-can-talk-to-each-other-because-the-transit-gateway-allow-transitive-connection">With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to each other. In the diagram below everyone can talk to each other because the transit gateway allow transitive connection.</a></summary>
+    
 * [Direct Connect](#direct-connect)
+* [VPN CloudHub](#vpn-cloudhub)
 * [VPC Flow Logs](#vpc-flow-logs)
 </details>
 
@@ -278,9 +284,9 @@ Each instance has a default network interface, called the primary network interf
 
 ## VPC Basics
 
-The VPC (Virtual Private Cloud) is how networking is done in the AWS cloud. The VPC is like having your own data center inside AWS. The VPC separates resources from different customers and different projects.
+Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources into a virtual network that resembles a traditional network that you'd operate in your own data center, with the benefits of using the scalable infrastructure of AWS.
 
-VPCs are specific to a region, and a single VPC will span all the availability zones in a region. You can make subnets of a VPC, subnets are specific to availability zones.
+VPCs are specific to a region. A single VPC spans all the availability zones in a region. You can make subnets of a VPC, subnets are specific to availability zones.
 
 <!-- TODO: subnets within -->
 
@@ -501,7 +507,7 @@ In the diagram below our VPC endpoint service is in VPC B. The dashed line aroun
 
 ## VPC Peering
 
-VPC peering is a connection between two VPCs that allows you to route traffic between them privately. It allows you to communicate between different VPCs as if they were in the same VPC. VPCs can be peered within your own account or across different accounts. The VPCs must have non-overlapping CIDR blocks.
+VPC peering is a connection between two VPCs that allows you to route traffic between them privately. It allows you to communicate between different VPCs as if they were in the same VPC. You can create a VPC peering connection between your own VPCs, or with a VPC in another AWS account. The VPCs can be in different regions (also known as an inter-region VPC peering connection). The VPCs must have non-overlapping CIDR blocks.
 
 ![](./source/images/VPC-peer-1.png)
 
@@ -519,6 +525,14 @@ You can set up a bastion host where you ssh into a public subnet. This bastion h
 
 [Bastion hosts blog post](https://aws.amazon.com/blogs/security/how-to-record-ssh-sessions-established-through-a-bastion-host/)
 
+## What is a VPN?
+
+https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/network-to-amazon-vpc-connectivity-options.html
+
+Although the term VPN connection is a general term, in this documentation, a VPN connection refers to the connection between your VPC and your own on-premises network. Site-to-Site VPN supports Internet Protocol security (IPsec) VPN connections.
+
+These options are useful for integrating AWS resources with your existing on-site services (for example, monitoring, authentication, security, data or other systems) by extending your internal networks into the AWS Cloud.
+
 ## Site to Site VPN Connection
 
 You can configure a connection between a VPC and a local network, like your home network or the network for your office.
@@ -526,10 +540,15 @@ You can configure a connection between a VPC and a local network, like your home
 The diagram below shows the connection between an AWS VPC and an on-premises network. Let's talk about some of the components:
 
 *   **VPN connection**: A secure connection between AWS and your on premises network.
-*   **Virtual private gateway**: A VPN concentrator (this just means that it sets up a secure connection) on the AWS side.
-*   **Customer gateway**: A physical device that you set up on-premises to connect with AWS.
+*   **Virtual private gateway**: Sets up a secure connection on the AWS side.
+*   **Customer gateway device**: A physical device that you set up on-premises to connect with AWS.
+*   **Customer gateway**: A resource that you create in AWS that represents the customer gateway device in your on-premises network.
 
-![](./source/images/VPN-single.png)
+IPsec is just a protocol for
+
+![](./source/images/vpc-site-to-site.png)
+
+https://en.wikipedia.org/wiki/IPsec
 
 [//]: # "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
 
@@ -537,25 +556,24 @@ The diagram below shows the connection between an AWS VPC and an on-premises net
 
 [Site-to-Site VPN docs](https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html)
 
-## VPN CloudHub
-
-VPN cloudhub allows for multiple site-to-site connections and for communications between your sites. Sites must have non-overlapping IP ranges.
-
-![](./source/images/VPN-cloudhub.png)
-
-[VPN CloudHub docs](https://docs.aws.amazon.com/vpn/latest/s2svpn/VPN_CloudHub.html)
-
 ## Transit Gateway
-
-Cloudhub is specifically for the case when you need to connect multiple on-premise data centers to AWS, **but the transit gateway is more general**.
 
 Transit gateway lets you connect VPN, direct connect, VPCs and more.
 
+<<<<<<< Updated upstream
 Suppose we want to connect many VPC, direct connect, and VPNs together. VPC peering is not transitive and is not general enough. We would need 45 connections to connect 10 things together so that everything can talk to each other.
 
-With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to each other. In the diagram below everyone can talk to each other because the transit gateway allow transitive connection.
+# With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to each other. In the diagram below everyone can talk to each other because the transit gateway allow transitive connection.
+
+Suppose we want to connect many VPCs together. VPC peering is not transitive so it would take 45 connections to connect 10 VPCs together. With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to eachother. In the diagram below everyone can talk to eachother because the transit gateway allow transitive connection.
+
+> > > > > > > Stashed changes
 
 ![](./source/images/VPC-transit-gateway.png)
+
+You can connect multiple user gateways to the transit gateway to implement redundancy and failover.
+
+![](./source/images/vpc-transit-gateway2.png)
 
 Transit gateways support IP multicast. This means that you can send multiple IP addresses at once to a transit gateway and it will communicate to them all. This is not supported in our other routing methods.
 
@@ -568,6 +586,16 @@ AWS direct connect allows you to connect to AWS while bypassing your internet se
 ![](./source/images/VPC-direct.png)
 
 [Direct Connect docs](https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html)
+
+## VPN CloudHub
+
+Cloudhub is specifically for the case when you need to connect multiple on-premise data centers to AWS, **but the transit gateway is more general**.
+
+VPN cloudhub allows for multiple site-to-site connections and for communications between your sites. Sites must have non-overlapping IP ranges.
+
+![](./source/images/VPN-cloudhub.png)
+
+[VPN CloudHub docs](https://docs.aws.amazon.com/vpn/latest/s2svpn/VPN_CloudHub.html)
 
 ## VPC Flow Logs
 
