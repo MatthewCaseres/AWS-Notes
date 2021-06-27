@@ -24,7 +24,7 @@ prompt: How do you mark a problem for review?
 answers:
   - 'Change the symbol to the left of the submit button.'
 correct_idx: 0
-id: cd000b19-5dfa-48e8-b6d3-31cb7aa391eb
+id: cd000b19-5dfa-48e8-b6d3-31b7aa391eb
 solution: Nice.
 ```
 

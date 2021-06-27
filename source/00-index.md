@@ -1,6 +1,7 @@
 # AWS Solutions Architect Associate Notes
 
 - [Tutorial](Tutorial.md)
+- [Expand Demo](000-demo.md)
 - [EC2](EC2.md)
 - [VPC](VPC.md)
 - [S3](S3.md)
