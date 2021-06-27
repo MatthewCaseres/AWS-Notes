@@ -139,7 +139,7 @@ prompt: How do you mark a problem for review?
 answers:
   - 'Change the symbol to the left of the submit button.'
 correct_idx: 0
-id: cd000b19-5dfa-48e8-b6d3-31cb7aa391eb
+id: cd000b19-5dfa-48e8-b6d3-31b7aa391eb
 solution: Nice.
 ```
 
@@ -166,6 +166,46 @@ answers:
   - 'No'
 correct_idx: 0
 id: 33694418-b93b-4c47-8f0c-117608f58e8b
+prompt: Do you understand how to complete problems and how to mark problems you don't understand.
+solution: Pick options 1 and 5.
+```
+
+```mcq
+answers:
+  - 'Yes'
+  - 'No'
+correct_idx: 0
+id: 33694418-b93b-gsd4c47-8f0c-11asdfa7608f58e8b
+prompt: Do you understand how to complete problems and how to mark problems you don't understand.
+solution: Pick options 1 and 5.
+```
+
+```mcq
+answers:
+  - 'Yes'
+  - 'No'
+correct_idx: 0
+id: 33694418-bjgh93b-4c47-8f0c-117608f58e8b
+prompt: Do you understand how to complete problems and how to mark problems you don't understand.
+solution: Pick options 1 and 5.
+```
+
+```mcq
+answers:
+  - 'Yes'
+  - 'No'
+correct_idx: 0
+id: 33694418-b93b-4c47dfd-8f0c-11760gfsd8f58e8b
+prompt: Do you understand how to complete problems and how to mark problems you don't understand.
+solution: Pick options 1 and 5.
+```
+
+```mcq
+answers:
+  - 'Yes'
+  - 'No'
+correct_idx: 0
+id: 33694418-b93b-4c47-kjg8f0c-117608f58esd8b
 prompt: Do you understand how to complete problems and how to mark problems you don't understand.
 solution: Pick options 1 and 5.
 ```
@@ -343,6 +383,26 @@ An elastic network interface is a logical networking component in a VPC that rep
 You can create a network interface, attach it to an instance, detach it from an instance, and attach it to another instance. The attributes of a network interface follow it as it's attached or detached from an instance and reattached to another instance. When you move a network interface from one instance to another, network traffic is redirected to the new instance.
 
 Each instance has a default network interface, called the primary network interface. You cannot detach a primary network interface from an instance.
+
+```mcq
+answers:
+  - 'Yes'
+  - 'No'
+correct_idx: 0
+id: 33694418-b93b-4c47-8f0c-11asdfa8f58e
+prompt: This is EC2 question 1
+solution: Yes
+```
+
+```mcq
+answers:
+  - 'Yes'
+  - 'No'
+correct_idx: 0
+id: 33694418-b9b-4c47-8f0c-11asdfa8f58e
+prompt: This is EC2 question 2
+solution: Yes
+```
 
 # VPC
 
