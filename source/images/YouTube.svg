@@ -28,10 +28,10 @@
      inkscape:cx="392.8394"
      inkscape:cy="189.28051"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer3"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="1252"
+     inkscape:window-width="1440"
      inkscape:window-height="793"
      inkscape:window-x="0"
      inkscape:window-y="25"
@@ -49,6 +49,10 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Layer 2" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
@@ -88,7 +92,7 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.5369px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.328353"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.53689999999999927px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.328353;stroke:#ffffff;stroke-opacity:1;"
        x="3.7083373"
        y="21.867693"
        id="text884"><tspan
@@ -96,7 +100,7 @@
          id="tspan882"
          x="3.7083373"
          y="21.867693"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.5369px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.328353">Click here to watch </tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.53689999999999927px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.328353;stroke:#ffffff;stroke-opacity:1;">Click here to watch </tspan></text>
     <g
        id="g946"
        transform="matrix(0.24035174,0,0,0.24035174,5.7932363,30.692878)">
