@@ -117,7 +117,7 @@
 
 ## Video Tutorial
 
-[Video tutorial](https://www.youtube.com/watch?v=a9\__D53WsUs)
+[![YouTube Logo](./source/images/YouTube.svg)](https://www.youtube.com/watch?v=a9\__D53WsUs)
 
 ## Review
 
