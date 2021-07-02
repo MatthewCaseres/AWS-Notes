@@ -3,8 +3,7 @@
 <details>
   <summary><a href="#tutorial">Tutorial</a></summary>
     
-* [Video Tutorial](#video-tutorial)
-* [Review](#review)
+
 </details>
 
 <details>
@@ -114,170 +113,6 @@
 
 
 # Tutorial
-
-## Video Tutorial
-
-[![YouTube Logo](./source/images/YouTube.svg)](https://www.youtube.com/watch?v=a9\__D53WsUs)
-
-## Review
-
-You need to sign in before you solve any problems.
-
-
-<hr /> 
-
-How do you sign in?
-
-* [ ] Using the "sign in" button in the left sidebar.
-
-<details><summary><b>solution</b></summary>
-
-* [X] Using the "sign in" button in the left sidebar.
-
-Good work.
-
-</details><hr /> 
-
-
-
-You might want to mark a problem to look at it later.
-
-
-<hr /> 
-
-How do you mark a problem for review?
-
-* [ ] Change the symbol to the left of the submit button.
-
-<details><summary><b>solution</b></summary>
-
-* [X] Change the symbol to the left of the submit button.
-
-Nice.
-
-</details><hr /> 
-
-
-
-
-<hr /> 
-
-If you don't know how to answer a question you can click the orange button to see the solution. If you click the orange button and then the blue button the problem will be completed.
-
-* [ ] Option 1
-* [ ] Option 2
-* [ ] Option 3
-* [ ] Option 4
-* [ ] Option 5
-
-<details><summary><b>solution</b></summary>
-
-* [X] Option 1
-* [ ] Option 2
-* [ ] Option 3
-* [ ] Option 4
-* [X] Option 5
-
-You can always click the "Solution" button to view the correct answer.
-
-</details><hr /> 
-
-
-
-The ide
-
-
-<hr /> 
-
-Do you understand how to complete problems and how to mark problems you don't understand.
-
-* [ ] Yes
-* [ ] No
-
-<details><summary><b>solution</b></summary>
-
-* [X] Yes
-* [ ] No
-
-Pick options 1 and 5.
-
-</details><hr /> 
-
-
-
-<hr /> 
-
-Do you understand how to complete problems and how to mark problems you don't understand.
-
-* [ ] Yes
-* [ ] No
-
-<details><summary><b>solution</b></summary>
-
-* [X] Yes
-* [ ] No
-
-Pick options 1 and 5.
-
-</details><hr /> 
-
-
-
-
-<hr /> 
-
-Do you understand how to complete problems and how to mark problems you don't understand.
-
-* [ ] Yes
-* [ ] No
-
-<details><summary><b>solution</b></summary>
-
-* [X] Yes
-* [ ] No
-
-Pick options 1 and 5.
-
-</details><hr /> 
-
-
-
-
-<hr /> 
-
-Do you understand how to complete problems and how to mark problems you don't understand.
-
-* [ ] Yes
-* [ ] No
-
-<details><summary><b>solution</b></summary>
-
-* [X] Yes
-* [ ] No
-
-Pick options 1 and 5.
-
-</details><hr /> 
-
-
-
-
-<hr /> 
-
-Do you understand how to complete problems and how to mark problems you don't understand.
-
-* [ ] Yes
-* [ ] No
-
-<details><summary><b>solution</b></summary>
-
-* [X] Yes
-* [ ] No
-
-Pick options 1 and 5.
-
-</details><hr /> 
-
 
 # EC2
 
@@ -508,7 +343,7 @@ Your CIDR block must be in the private IP ranges:
 
 *   `10.0.0.0 – 10.255.255.255`, CIDR `10.0.0.0/8`
 *   `172.16.0.0 – 172.31.255.255`, CIDR `172.16.0.0/12`
-*   `192.168.0.0 – 192.168.255.255`, CIDR `	192.168.0.0/16`
+*   `192.168.0.0 – 192.168.255.255`, CIDR `  192.168.0.0/16 `
 
 You can add multiple CIDR blocks to your VPC. CIDR blocks must not overlap, so we can't have both `10.0.0.0/28` and `10.0.0.1/28` in a VPC. You can never modify the range of an existing CIDR block
 
@@ -821,6 +656,43 @@ You can create flow logs at varying levels of granularity: for a VPC, subnet, or
 ![](./source/images/VPC-flow-logs.png)
 
 [Flow logs docs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html)
+
+
+<hr /> 
+
+This is VPC question 1
+
+* [ ] Yes
+* [ ] No
+
+<details><summary><b>solution</b></summary>
+
+* [X] Yes
+* [ ] No
+
+Yes
+
+</details><hr /> 
+
+
+
+
+<hr /> 
+
+This is VPC question 2
+
+* [ ] Yes
+* [ ] No
+
+<details><summary><b>solution</b></summary>
+
+* [X] Yes
+* [ ] No
+
+Yes
+
+</details><hr /> 
+
 
 # S3
 
