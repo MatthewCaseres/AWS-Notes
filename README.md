@@ -114,28 +114,6 @@
 
 # Tutorial
 
-
-<hr /> 
-
-Do you understand the tutorial?
-
-* [ ] Nope.
-* [ ] No.
-* [ ] Yes.
-* [ ] Maybe.
-
-<details><summary><b>solution</b></summary>
-
-* [ ] Nope.
-* [ ] No.
-* [X] Yes.
-* [ ] Maybe.
-
-Glad you understand.
-
-</details><hr /> 
-
-
 # EC2
 
 ## What is Amazon EC2
