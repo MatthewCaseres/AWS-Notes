@@ -14,9 +14,9 @@ When you create a VPC, you must associate an IPv4 CIDR block for it. The CIDR bl
 
 Your CIDR block must be in the private IP ranges:
 
-* `10.0.0.0 – 10.255.255.255`, CIDR `10.0.0.0/8` 
-* `172.16.0.0 – 172.31.255.255`, CIDR `172.16.0.0/12`
-* `192.168.0.0 – 192.168.255.255`, CIDR `	192.168.0.0/16`
+- `10.0.0.0 – 10.255.255.255`, CIDR `10.0.0.0/8`
+- `172.16.0.0 – 172.31.255.255`, CIDR `172.16.0.0/12`
+- `192.168.0.0 – 192.168.255.255`, CIDR ` 192.168.0.0/16`
 
 You can add multiple CIDR blocks to your VPC. CIDR blocks must not overlap, so we can't have both `10.0.0.0/28` and `10.0.0.1/28` in a VPC. You can never modify the range of an existing CIDR block
 
@@ -34,11 +34,11 @@ In a `/24` IPv4 we would expect for there to be 256 addresses, 2^(32-24) = 2^8 =
 
 The 5 missing IP addresses are reserved as follows:
 
-* `172.31.80.0` is used as the network address
-* `172.31.80.1` is reserved for the VPC router
-* `172.31.80.2` is reserved for the DNS
-* `172.31.80.3` is reserved by AWS for future use
-* `172.31.80.255` is the network broadcast address. AWS does not support broadcast so this is reserved.
+- `172.31.80.0` is used as the network address
+- `172.31.80.1` is reserved for the VPC router
+- `172.31.80.2` is reserved for the DNS
+- `172.31.80.3` is reserved by AWS for future use
+- `172.31.80.255` is the network broadcast address. AWS does not support broadcast so this is reserved.
 
 If a question asks what IP addresses you can use, the first 4 IP addresses are reserved, as well as the last one. Be able to calculate the CIDR range for a simple example like 10.0.0.0/24.
 
@@ -66,11 +66,11 @@ At the beginning of this section we said that every subnet needs to be associate
 
 There is a **main route table** which is created when a new VPC is created. You do not need to explicitly associate a new subnet with a route table, there is an automatic association with the main route table.
 
-You do not need to explicitly define routes for traffic *between subnets*. The VPC knows what ranges your subnets exist on and will take care of this for you.
+You do not need to explicitly define routes for traffic _between subnets_. The VPC knows what ranges your subnets exist on and will take care of this for you.
 
 ### Main Route Table
 
-Let's go over an example on the main route table from the AWS documentation. 
+Let's go over an example on the main route table from the AWS documentation.
 
 Suppose you have two subnets and two route tables. Initially, both subnets have an implicit association with Route Table A, the main route table. We want to change both subnets to be associated with route table B.
 
@@ -94,22 +94,22 @@ A route table can be associated with multiple subnets, but a subnet cannot be as
 
 ## Internet Gateway
 
-Instances that have a public IP address in a subnet can connect to the internet we need an internet gateway. Let's look at a route table again to see how this works: 
+Instances that have a public IP address in a subnet can connect to the internet we need an internet gateway. Let's look at a route table again to see how this works:
 
 ![](./images/route-table.png)
 
 Traffic going to the private IPs of the CIDR block for the VPC stay `local` to the VPC. All other traffic goes to `igw-d2b99dba`, which is an internet gateway that will take this traffic to the internet. If this rule is not in the route table, then traffic will not get routed to the internet gateway even if there is a route table.
 
-The internet gateway horizontally 
+The internet gateway horizontally
 s, is redundant, and is highly available. AWS manages these things. You do not need to worry about availability or scalability of your internet gateways.
 
 [Internet Gateway docs](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html)
 
 ## NAT devices
 
-The internet gateway connects devices with public IPs to the internet. Some things shouldn't be accessible by the internet so they don't have a public IP. They still might need to access the internet to update or install new software though! 
+The internet gateway connects devices with public IPs to the internet. Some things shouldn't be accessible by the internet so they don't have a public IP. They still might need to access the internet to update or install new software though!
 
-We solve this problem by using a NAT (Network Address Translation) device. The NAT device is in a public subnet and has a public IP that is used to communicate with the internet. 
+We solve this problem by using a NAT (Network Address Translation) device. The NAT device is in a public subnet and has a public IP that is used to communicate with the internet.
 
 **The NAT device allows devices with private IPs to initiate outbound connections to the internet over IPv4 while preventing unwanted inbound connections**
 
@@ -119,7 +119,7 @@ NAT devices are either a **NAT instance** or a **NAT gateway**. The NAT instance
 
 In the diagram below we see database servers that are in a private subnet and are connected to the internet using a NAT instance. The private subnet contains no routes pointing to the internet gateway, and the servers inside do not have public IPs.
 
-Here is how it works: 
+Here is how it works:
 
 1. The Database servers send a request to a public IP.
 2. This public IP is in the range `0.0.0.0/0` and so it is routed to the NAT instance at `nat-instance-id`.
@@ -148,7 +148,7 @@ A comparison of the NAT gateways and instances from the AWS documentation:
 
 ## Egress-only internet gateways
 
-When we have a public IPv4 address or an IPv6 address and our EC2 instance is connected to a public gateway, we can send and receive traffic from the internet. 
+When we have a public IPv4 address or an IPv6 address and our EC2 instance is connected to a public gateway, we can send and receive traffic from the internet.
 
 People on the internet can send us traffic even if we didn't ask for the traffic. This can be solved for IPv4 by having an instance in a private subnet that is attached to a NAT gateway.
 
@@ -164,14 +164,14 @@ Multiple EC2 instances can have the same security group. The security group belo
 
 Here are some properties of security groups:
 
-* You can specify allow rules but not deny rules, traffic that is not explicitly allowed is denied.
-* There are separate rules for inbound and outbound traffic.
-* Security groups are stateful. Suppose they sent a request to an IP address. They will be able to receive the response to their request even if they do not have an inbound security rule that would allow the traffic.
+- You can specify allow rules but not deny rules, traffic that is not explicitly allowed is denied.
+- There are separate rules for inbound and outbound traffic.
+- Security groups are stateful. Suppose they sent a request to an IP address. They will be able to receive the response to their request even if they do not have an inbound security rule that would allow the traffic.
 
 ### Default Security Groups
 
-* When creating a new security group no inbound traffic is allowed by default. This is in contrast to the default security group that is created when a VPC is created, which does allow inbound traffic **only for traffic originating from the same security group**.
-* For both custom and default security groups, all outbound traffic is allowed by default.
+- When creating a new security group no inbound traffic is allowed by default. This is in contrast to the default security group that is created when a VPC is created, which does allow inbound traffic **only for traffic originating from the same security group**.
+- For both custom and default security groups, all outbound traffic is allowed by default.
 
 [Security Groups docs](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)
 
@@ -179,16 +179,16 @@ Here are some properties of security groups:
 
 Network ACLs are also a type of firewall. Here are some differences between the network ACL and the security group.
 
-* Network ACLs are applied to subnets, security groups are applied to EC2 instances.
-* The network ACL is stateless, responses to inbound traffic are subject to the rules for outbound traffic. This is not true for security groups, where the outbound rules don't apply for responses to received inbound traffic (it is stateful).
-* The network ACL can have both allow and deny rules. The security group only has allow rules and everything not explicitly allowed is implicitly denied.
+- Network ACLs are applied to subnets, security groups are applied to EC2 instances.
+- The network ACL is stateless, responses to inbound traffic are subject to the rules for outbound traffic. This is not true for security groups, where the outbound rules don't apply for responses to received inbound traffic (it is stateful).
+- The network ACL can have both allow and deny rules. The security group only has allow rules and everything not explicitly allowed is implicitly denied.
 
 Here are some similarities between the network ACL and the security group.
 
-* They both control access within a VPC.
-* All subnets must be associated with a network ACL, just like all EC2 instances must have a security group.
-* You can associate a network ACL with multiple subnets, just like a security group can be associated with multiple EC2 instances.
-* VPCs come with a default network ACL, just like EC2 instances come with a default security group.
+- They both control access within a VPC.
+- All subnets must be associated with a network ACL, just like all EC2 instances must have a security group.
+- You can associate a network ACL with multiple subnets, just like a security group can be associated with multiple EC2 instances.
+- VPCs come with a default network ACL, just like EC2 instances come with a default security group.
 
 The default NACL that comes with the VPC allows all traffic in and out of the VPC. If you make a custom NACL, it will deny all inbound and allow all outbound traffic unless you make changes to these settings.
 
@@ -198,7 +198,7 @@ Since there are both allow and deny rules we need a way of deciding which rule i
 
 ## VPC Endpoints
 
-VPC endpoints enable private connections between your VPC and AWS services. 
+VPC endpoints enable private connections between your VPC and AWS services.
 
 Suppose we want to access an AWS service (like a database) from a private subnet. This service has a public IP that we can use. So we can use a NAT gateway to communicate from our private subnet to the internet which will communicate with the database.
 
@@ -206,10 +206,10 @@ It would be better if we could just talk to our AWS services over a private IP a
 
 VPC endpoints are horizontally scaled, redundant, and highly available.
 
-There are two types of VPC endpoints, the type you choose is determined by the service you are accessing: 
+There are two types of VPC endpoints, the type you choose is determined by the service you are accessing:
 
-* Gateway endpoints are used for S3 and DynamoDB (two AWS services discussed in depth later).
-* Interface endpoints are used for other services.
+- Gateway endpoints are used for S3 and DynamoDB (two AWS services discussed in depth later).
+- Interface endpoints are used for other services.
 
 [VPC endpoint docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html)
 
@@ -257,19 +257,19 @@ You can configure a connection between a VPC and a local network, like your home
 
 The diagram below shows the connection between an AWS VPC and an on-premises network. Let's talk about some of the components:
 
-* **VPN connection**: A secure connection between AWS and your on premises network.
-* **Virtual private gateway**: Sets up a secure connection on the AWS side.
-* **Customer gateway device**: A physical device that you set up on-premises to connect with AWS.
-* **Customer gateway**: A resource that you create in AWS that represents the customer gateway device in your on-premises network.
+- **VPN connection**: A secure connection between AWS and your on premises network.
+- **Virtual private gateway**: Sets up a secure connection on the AWS side.
+- **Customer gateway device**: A physical device that you set up on-premises to connect with AWS.
+- **Customer gateway**: A resource that you create in AWS that represents the customer gateway device in your on-premises network.
 
-IPsec is just a protocol for 
+IPsec is just a protocol for
 
 ![](./images/vpc-site-to-site.png)
 
 https://en.wikipedia.org/wiki/IPsec
 
-[//]: # (https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html)
-[//]: # (https://docs.aws.amazon.com/vpn/latest/s2svpn/Examples.html)
+[//]: # "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+[//]: # "https://docs.aws.amazon.com/vpn/latest/s2svpn/Examples.html"
 
 [Site-to-Site VPN docs](https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html)
 
@@ -278,12 +278,13 @@ https://en.wikipedia.org/wiki/IPsec
 Transit gateway lets you connect VPN, direct connect, VPCs and more.
 
 <<<<<<< Updated upstream
-Suppose we want to connect many VPC, direct connect, and VPNs together. VPC peering is not transitive and is not general enough. We would need 45 connections to connect 10 things together so that everything can talk to each other. 
+Suppose we want to connect many VPC, direct connect, and VPNs together. VPC peering is not transitive and is not general enough. We would need 45 connections to connect 10 things together so that everything can talk to each other.
 
-With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to each other. In the diagram below everyone can talk to each other because the transit gateway allow transitive connection.
-=======
+# With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to each other. In the diagram below everyone can talk to each other because the transit gateway allow transitive connection.
+
 Suppose we want to connect many VPCs together. VPC peering is not transitive so it would take 45 connections to connect 10 VPCs together. With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to eachother. In the diagram below everyone can talk to eachother because the transit gateway allow transitive connection.
->>>>>>> Stashed changes
+
+> > > > > > > Stashed changes
 
 ![](./images/VPC-transit-gateway.png)
 
@@ -301,7 +302,6 @@ AWS direct connect allows you to connect to AWS while bypassing your internet se
 
 ![](./images/VPC-direct.png)
 
-
 [Direct Connect docs](https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html)
 
 ## VPN CloudHub
@@ -314,16 +314,14 @@ VPN cloudhub allows for multiple site-to-site connections and for communications
 
 [VPN CloudHub docs](https://docs.aws.amazon.com/vpn/latest/s2svpn/VPN_CloudHub.html)
 
-
-
 ## VPC Flow Logs
 
-VPC flow logs help you track information about IP traffic going in and out of the network interfaces (ENIs) of your VPC. 
+VPC flow logs help you track information about IP traffic going in and out of the network interfaces (ENIs) of your VPC.
 
-Flow logs can help you - 
+Flow logs can help you -
 
-* Troubleshoot issues with security group rules
-* Monitor traffic reaching an instance
+- Troubleshoot issues with security group rules
+- Monitor traffic reaching an instance
 
 You can create flow logs at varying levels of granularity: for a VPC, subnet, or a network interface. If you create a flow log for a subnet or VPC all the ENIs in the VPC/subnet will be monitored. You can write flow logs either to an S3 bucket (a storage service) or to Cloudwatch (a cloud monitoring service).
 
@@ -331,13 +329,22 @@ You can create flow logs at varying levels of granularity: for a VPC, subnet, or
 
 [Flow logs docs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html)
 
+```mcq
+answers:
+  - 'Yes'
+  - 'No'
+correct_idx: 0
+id: 33694418-b93b-4c47-8f0c-11asdfa8f58e
+prompt: This is VPC question 1
+solution: Yes
+```
 
-
-
-
-
-
-
-
-
-
+```mcq
+answers:
+  - 'Yes'
+  - 'No'
+correct_idx: 0
+id: 33694418-b9b-4c47-8f0c-11asdfa8f58e
+prompt: This is VPC question 2
+solution: Yes
+```
