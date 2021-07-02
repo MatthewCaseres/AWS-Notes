@@ -193,3 +193,18 @@ id: 33694418-b9b-4c47-8f0c-11asdfa8f58e
 prompt: This is EC2 question 2
 solution: Yes
 ```
+
+```mcq
+prompt: EC2 question
+solution: This is where the solution is. Click to start editing.
+answers:
+  - Correct 1
+  - Correct 2
+  - You can output the JSX or YAML code for the problem to use in your program.
+  - Thanks!
+  - For multiple selection questions there are two correct answers usually.
+correct_idx:
+  - 0
+  - 1
+id: ikWqalIZYBF83ZIfk4QNH
+```
