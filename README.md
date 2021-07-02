@@ -325,6 +325,31 @@ Yes
 </details><hr /> 
 
 
+
+
+<hr /> 
+
+EC2 question
+
+* [ ] Correct 1
+* [ ] Correct 2
+* [ ] You can output the JSX or YAML code for the problem to use in your program.
+* [ ] Thanks!
+* [ ] For multiple selection questions there are two correct answers usually.
+
+<details><summary><b>solution</b></summary>
+
+* [X] Correct 1
+* [X] Correct 2
+* [ ] You can output the JSX or YAML code for the problem to use in your program.
+* [ ] Thanks!
+* [ ] For multiple selection questions there are two correct answers usually.
+
+This is where the solution is. Click to start editing.
+
+</details><hr /> 
+
+
 # VPC
 
 ## VPC Basics
