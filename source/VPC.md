@@ -334,7 +334,7 @@ answers:
   - 'Yes'
   - 'No'
 correct_idx: 0
-id: 33694418-b93b-4c47-8f0c-11asdfa8f58e
+id: 33694418-b9dfs3b-4c47-8f0c-11asdfa8f58e
 prompt: This is VPC question 1
 solution: Yes
 ```
@@ -344,7 +344,7 @@ answers:
   - 'Yes'
   - 'No'
 correct_idx: 0
-id: 33694418-b9b-4c47-8f0c-11asdfa8f58e
+id: 33694418-b9b-4c47hfg-8f0c-11asdfa8f58e
 prompt: This is VPC question 2
 solution: Yes
 ```
