@@ -55,11 +55,6 @@
 * [What is a VPN?](#what-is-a-vpn)
 * [Site to Site VPN Connection](#site-to-site-vpn-connection)
 * [Transit Gateway](#transit-gateway)
-</details>
-
-<details>
-  <summary><a href="#with-the-transit-gateway-we-connect-all-of-the-vpcs-to-the-transit-gateway-and-they-can-all-talk-to-each-other-in-the-diagram-below-everyone-can-talk-to-each-other-because-the-transit-gateway-allow-transitive-connection">With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to each other. In the diagram below everyone can talk to each other because the transit gateway allow transitive connection.</a></summary>
-    
 * [Direct Connect](#direct-connect)
 * [VPN CloudHub](#vpn-cloudhub)
 * [VPC Flow Logs](#vpc-flow-logs)
@@ -779,14 +774,7 @@ https://en.wikipedia.org/wiki/IPsec
 
 Transit gateway lets you connect VPN, direct connect, VPCs and more.
 
-<<<<<<< Updated upstream
-Suppose we want to connect many VPC, direct connect, and VPNs together. VPC peering is not transitive and is not general enough. We would need 45 connections to connect 10 things together so that everything can talk to each other.
-
-# With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to each other. In the diagram below everyone can talk to each other because the transit gateway allow transitive connection.
-
 Suppose we want to connect many VPCs together. VPC peering is not transitive so it would take 45 connections to connect 10 VPCs together. With the transit gateway we connect all of the VPCs to the transit gateway and they can all talk to eachother. In the diagram below everyone can talk to eachother because the transit gateway allow transitive connection.
-
-> > > > > > > Stashed changes
 
 ![](./source/images/VPC-transit-gateway.png)
 
