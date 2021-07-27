@@ -8,6 +8,14 @@
 </details>
 
 <details>
+  <summary><a href="#aws-global-infrastructure">AWS Global Infrastructure</a></summary>
+    
+* [Traditional Data Centers](#traditional-data-centers)
+* [AWS vs. Traditional Data Centers](#aws-vs-traditional-data-centers)
+* [Global Infrastructure](#global-infrastructure)
+</details>
+
+<details>
   <summary><a href="#ec2">EC2</a></summary>
     
 * [What is Amazon EC2](#what-is-amazon-ec2)
@@ -19,6 +27,14 @@
 * [EC2 Instance Types](#ec2-instance-types)
 * [Placement groups](#placement-groups)
 * [Network Interfaces](#network-interfaces)
+</details>
+
+<details>
+  <summary><a href="#networking-basics">Networking Basics</a></summary>
+    
+* [IPv4](#ipv4)
+* [CIDR](#cidr)
+* [Private Addresses](#private-addresses)
 </details>
 
 <details>
@@ -50,12 +66,42 @@
 </details>
 
 <details>
+  <summary><a href="#auto-scaling">Auto Scaling</a></summary>
+    
+* [What is Amazon EC2 Auto Scaling?](#what-is-amazon-ec2-auto-scaling)
+* [Auto scaling benefits](#auto-scaling-benefits)
+* [Dynamic Scaling Policy Types](#dynamic-scaling-policy-types)
+* [Scaling Cooldowns](#scaling-cooldowns)
+* [Scheduled Scaling](#scheduled-scaling)
+* [Lifecycle Hooks](#lifecycle-hooks)
+* [Health Checks](#health-checks)
+</details>
+
+<details>
+  <summary><a href="#elastic-load-balancing">Elastic Load Balancing</a></summary>
+    
+* [What is Elastic Load Balancing?](#what-is-elastic-load-balancing)
+* [ALB](#alb)
+* [NLB](#nlb)
+* [Cross-zone load balancing](#cross-zone-load-balancing)
+</details>
+
+<details>
+  <summary><a href="#ebs">EBS</a></summary>
+    
+* [What is EBS?](#what-is-ebs)
+* [Instance Types](#instance-types)
+* [Snapshots](#snapshots)
+* [Encryption](#encryption)
+</details>
+
+<details>
   <summary><a href="#s3">S3</a></summary>
     
 * [Buckets](#buckets)
 * [Objects](#objects)
 * [Data Consistency](#data-consistency)
-* [Encryption](#encryption)
+* [Encryption](#encryption-1)
 * [Managing Access](#managing-access)
 * [CORS](#cors)
 * [Versioning](#versioning)
@@ -74,14 +120,6 @@
 * [Amazon Redshift](#amazon-redshift)
 * [Elasticache](#elasticache)
 * [Other Databases](#other-databases)
-</details>
-
-<details>
-  <summary><a href="#aws-global-infrastructure">AWS Global Infrastructure</a></summary>
-    
-* [Traditional Data Centers](#traditional-data-centers)
-* [AWS vs. Traditional Data Centers](#aws-vs-traditional-data-centers)
-* [Global Infrastructure](#global-infrastructure)
 </details>
 
 <details>
@@ -110,6 +148,34 @@
 * [What is Kinesis?](#what-is-kinesis)
 * [Kinesis Data Streams](#kinesis-data-streams)
 * [Kinesis Data Firehose](#kinesis-data-firehose)
+* [Kinesis Data Analytics](#kinesis-data-analytics)
+</details>
+
+<details>
+  <summary><a href="#cloudwatch">Cloudwatch</a></summary>
+    
+* [What is CloudWatch?](#what-is-cloudwatch)
+* [Metrics](#metrics)
+* [Dashboards](#dashboards)
+* [Logs](#logs)
+* [High-Resolution Metrics](#high-resolution-metrics)
+* [EC2](#ec2-1)
+* [Using Amazon CloudWatch dashboards](#using-amazon-cloudwatch-dashboards)
+* [Alarms](#alarms)
+</details>
+
+<details>
+  <summary><a href="#containers-on-aws">Containers on AWS</a></summary>
+    
+* [What is a Container?](#what-is-a-container)
+* [What is Amazon Elatic Container Service?](#what-is-amazon-elatic-container-service)
+* [Fargate vs. EC2 Backed](#fargate-vs-ec2-backed)
+</details>
+
+<details>
+  <summary><a href="#snow">Snow</a></summary>
+    
+* [What is the AWS Snow Family?](#what-is-the-aws-snow-family)
 </details>
 
 
@@ -130,6 +196,30 @@ The problems in this book are licensed CC0, meaning that you can do whatever you
 Our software for electronic books is also licensed CC0.
 
 [![YouTube Logo](./source/images/YouTube.svg)](https://www.youtube.com/watch?v=HJ2flqIud8Q)
+
+# AWS Global Infrastructure
+
+## Traditional Data Centers
+
+Before cloud computing companies had to manage physical computation resources themselves. This meant a room full of servers, cables, and people that needed to understand how all of these things worked. This room is called a data center.
+
+## AWS vs. Traditional Data Centers
+
+With AWS you are paying to use Amazon's machines. They manage the data centers, not you.
+
+One advantage of this is that you can just pay for what you need. In the past companies would have to commit to buying servers. This is a big commitment, and it would be easy to overestimate or underestimate your needs.
+
+You might not have money to buy servers. You might only need them for one month of the year, or one hour of the day. This is why it is better to just pay for what you need with AWS.
+
+## Global Infrastructure
+
+AWS has lots of data centers so that it can meet the needs of huge companies like Amazon and Netflix.
+
+A cluster of data centers is called a **region**. Within this cluster there are more clusters called availability zones.
+
+The reason for having physically separate availability zones is that the region is more fault-tolerant in case of a natural disaster.
+
+Availabilty zones within a region are connected with redundant, high-bandwidth, low-latency networking. Data centers within the availability zone are also connected.
 
 # EC2
 
@@ -366,6 +456,48 @@ This is where the solution is. Click to start editing.
 
 </details><hr /> 
 
+
+# Networking Basics
+
+## IPv4
+
+IP addresses specify the location of devices on the internet. IPv4 is a type of IP address. There are 32 bits in an IPv4 address, for a total of 2^32 (about 4 billion) IPv4 addresses. IPv4 is the most common way to do addressing, but only having 4 billion addresses has led to the creation of IPv6 (IPv6 isn't a major exam topic).
+
+IP addresses are represented in "dot decimal" notation. There are four numbers 0-255 separated by decimals. So `120.247.236.38` is an IP address. IP addresses can be broken up into two parts, the **network prefix** which specifies the location of the network, and the **host identifier** which specifies a device on the network.
+
+![IPv4 address in dotted-decimal notation](./source/images/ipv4-dotdecimal.png)
+
+So maybe the network is specified by `120.247.236` and the host address is specified by `.38`. But how do we know where to split the address?
+
+[IPv4 on Wikipedia](https://en.wikipedia.org/wiki/IPv4)
+
+## CIDR
+
+CIDR is a way of specifying ranges of IP addresses. In `120.247.236.0/24` the `/24` means that the first 24 bits (`120.247.236`) are the network identifier and that the network contains device ranging from `120.247.236.0` to `120.247.236.255`.
+
+If we had something like `120.247.236.38/32` then every bit in the IP address is in the network prefix, and the network contains only a single device at `120.247.236.38/32`.
+
+Here is a chart from the official specification:
+
+![](./source/images/CIDR.png)
+
+When we day 0.0.0.0/0 we are specifying all IPv4 addresses. This is can be used in AWS to say that any IP address can access a resource.
+
+The term for the number that specifies the IP range in CIDR (i.e. `/24`, `/30`, etc.) is the **netmask**.
+
+## Private Addresses
+
+Some address ranges are private, meaning they are used for something like a private company wide 'intranet' but aren't sent over the public internet.
+
+These IP addressses are reserved and are in the ranges
+
+*   `10.0.0.0 – 10.255.255.255`, CIDR `10.0.0.0/8`
+*   `172.16.0.0 – 172.31.255.255`, CIDR `172.16.0.0/12`
+*   `192.168.0.0 – 192.168.255.255`, CIDR `	192.168.0.0/16`
+
+Can you make sense of the relationship between the CIDR block and the IP range?
+
+[CIDR on Wikipedia](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)
 
 # VPC
 
@@ -735,6 +867,220 @@ Yes
 
 </details><hr /> 
 
+
+# Auto Scaling
+
+## What is Amazon EC2 Auto Scaling?
+
+You create collections of EC2 instances, called Auto Scaling groups.
+
+*   Specify the **minimum** number of instances in each Auto Scaling group, and Amazon EC2 Auto Scaling ensures that your group never goes below this size.
+*   Specify the **maximum** number of instances in each Auto Scaling group, and Amazon EC2 Auto Scaling ensures that your group never goes above this size.
+*   If you specify the **desired capacity**, either when you create the group or at any time thereafter, Amazon EC2 Auto Scaling ensures that your group has this many instances.
+
+![Diagram of auto-scaling group](./source/images/asg.png)
+
+[What is auto-scaling docs](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html)
+
+## Auto scaling benefits
+
+*   Better fault tolerance.
+    *   Amazon EC2 Auto Scaling can detect when an instance is unhealthy, terminate it, and launch an instance to replace it.
+    *   You can configure Amazon EC2 Auto Scaling to use multiple Availability Zones. If one Availability Zone becomes unavailable, Amazon EC2 Auto Scaling can launch instances in another one to compensate.
+*   Better availability by increasing compute to meet needs.
+*   Cost savings by not buying too much, scale up to what you need.
+
+## Dynamic Scaling Policy Types
+
+Configure how your Auto Scaling group scales using dynamic scaling. There is an Amazon service called CloudWatch that can monitor things like CPU utilization of your EC2 instances. You can use a dynamic scaling policy to make sure that your Auto Scaling group meets a certain cloudwatch metric, like 50% CPU utilization.
+
+There are three types of scaling policies:
+
+*   **Target tracking scaling** - Increase or decrease the current capacity of the group based on a target value for a specific metric.
+    *   Our example where we track 50% CPU Utilization is an example of target tracking scaling.
+*   **Step/simple scaling** - Increase or decrease by a fixed amount when we hit a certain metric.
+    *   Add 1 EC2 instance if capacity is under 40%. Remove 1 EC2 instance if capacity is over 60%.
+*   **Based on SQS** - If you are processing messages from an SQS queue you can scale based on how many messages are in the queue.
+    *   An SQS queue is a line of messages waiting to be processes by an EC2 instance.
+
+[Scaling Policy Types](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html#as-scaling-types)
+
+## Scaling Cooldowns
+
+A scaling cooldown helps you prevent your Auto Scaling group from launching or terminating additional instances before the effects of previous activities are visible.
+
+When you use simple scaling, after the Auto Scaling group scales using a simple scaling policy, it waits for a cooldown period to complete before any further scaling activities initiated by simple scaling policies can start. An adequate cooldown period helps to prevent the initiation of an additional scaling activity based on stale metrics. By default, all simple scaling policies use the default cooldown period associated with your Auto Scaling group, but you can configure a different cooldown period for certain policies.
+
+## Scheduled Scaling
+
+Scheduled scaling helps you to set up your own scaling schedule according to predictable load changes. For example, let's say that every week the traffic to your web application starts to increase on Wednesday, remains high on Thursday, and starts to decrease on Friday. You can configure a schedule for Amazon EC2 Auto Scaling to increase capacity on Wednesday and decrease capacity on Friday.
+
+To use scheduled scaling, you create **scheduled actions**. Scheduled actions are performed automatically as a function of date and time. When you create a scheduled action, you specify when the scaling activity should occur and the new desired, minimum, and maximum sizes for the scaling action. You can create scheduled actions that scale one time only or that scale on a recurring schedule.
+
+## Lifecycle Hooks
+
+You can run a lifecycle hook to respond to events in the lifecycle of EC2 instances in an auto-scaling group.
+
+When scaling out you might want to run a script to download and install some software.
+
+When terminating an instance you might want to perform some clean up actions.
+
+![ASG Lifecycle Hooks](./source/images/asg-lifecycle.png)
+
+## Health Checks
+
+The health status of an Auto Scaling instance is either healthy or unhealthy. All instances in your Auto Scaling group start in the healthy state. Instances are assumed to be healthy unless Amazon EC2 Auto Scaling receives notification that they are unhealthy. This notification can come from one or more of the following sources: Amazon EC2, Elastic Load Balancing (ELB), or a custom health check.
+
+After Amazon EC2 Auto Scaling marks an instance as unhealthy, it is scheduled for replacement.
+
+# Elastic Load Balancing
+
+## What is Elastic Load Balancing?
+
+Elastic Load Balancing automatically distributes your incoming traffic across multiple targets, such as EC2 instances, containers, and IP addresses, in one or more Availability Zones. It monitors the health of its registered targets, and routes traffic only to the healthy targets.
+
+Using a load balancer increases the availability and fault tolerance of your applications.
+
+Elastic Load Balancing supports the following load balancers: Application Load Balancers, Network Load Balancers, Gateway Load Balancers, and Classic Load Balancers.
+
+*   Application Load Balancer
+    *   Supports HTTP and HTTPS (Secure HTTP) protocols.
+    *   Advanced routing.
+*   Network Load Balancer
+    *   Supports TCP, UDP, and TCP+UDP (Layer 4), and TLS listeners.
+    *   It is architected to handle millions of requests/sec, sudden volatile traffic patterns and provides extremely low latencies.
+*   Classic load balancer
+    *   HTTP, HTTPS (Secure HTTP), SSL (Secure TCP) and TCP protocols.
+
+## ALB
+
+A load balancer serves as the single point of contact for clients. Clients send requests to the load balancer, and the load balancer sends them to targets, such as EC2 instances. To configure your load balancer, you create target groups, and then register targets with your target groups. You also create listeners to check for connection requests from clients, and listener rules to route requests from clients to the targets in one or more target groups.
+
+HTTP requests and HTTP responses use header fields to send information about the HTTP messages. HTTP headers are added automatically. Header fields are colon-separated name-value pairs that are separated by a carriage return (CR) and a line feed (LF). A standard set of HTTP header fields is defined in RFC 2616, Message Headers. There are also non-standard HTTP headers available that are automatically added and widely used by the applications. Some of the non-standard HTTP headers have an X-Forwarded prefix. Application Load Balancers support the following X-Forwarded headers.
+
+### Rule condition types
+
+Rule condition types
+The following are the supported condition types for a rule:
+
+host-header
+Route based on the host name of each request. For more information, see Host conditions.
+
+http-header
+Route based on the HTTP headers for each request. For more information, see HTTP header conditions.
+
+http-request-method
+Route based on the HTTP request method of each request. For more information, see HTTP request method conditions.
+
+path-pattern
+Route based on path patterns in the request URLs. For more information, see Path conditions.
+
+query-string
+Route based on key/value pairs or values in the query strings. For more information, see Query string conditions.
+
+source-ip
+Route based on the source IP address of each request. For more information, see Source IP address conditions.
+
+The X-Forwarded-For request header is automatically added and helps you identify the IP address of a client when you use an HTTP or HTTPS load balancer. Because load balancers intercept traffic between clients and servers, your server access logs contain only the IP address of the load balancer.
+
+### Lambda
+
+You can register your Lambda functions as targets and configure a listener rule to forward requests to the target group for your Lambda function.
+
+### Sticky
+
+By default, an Application Load Balancer routes each request independently to a registered target based on the chosen load-balancing algorithm. However, you can use the sticky session feature (also known as session affinity) to enable the load balancer to bind a user's session to a specific target. This ensures that all requests from the user during the session are sent to the same target. This feature is useful for servers that maintain state information in order to provide a continuous experience to clients. To use sticky sessions, the client must support cookies.
+
+### Misc
+
+In order to make sure that ELB can scale to whatever volume you have and burst to whatever volume you suddenly encounter, AWS assigns a 'static' DNS hostname (e.g. MyDomainELB-918273645.us-east-1.elb.amazonaws.com). That hostname points to multiple IP addresses.
+
+https://stackoverflow.com/questions/35313134/assigning-static-ip-address-to-aws-load-balancer
+
+### Troubleshooting
+
+If your target is not in the `InService` state it might be failing health checks, it won't be in service until it passes at least one health check. Make sure that your security group and NACL allow for access from the ALB.
+
+There are different error codes you can get.
+
+*   4xx errors are caused by the client.
+    *   `HTTP 400: Bad request`
+    *   `HTTP: 401: Unauthorized`
+*   5xx errors means that there is a server-side error.
+    *   `HTTP 500: Internal server error`
+    *   `HTTP 503: Service unavailable` - this means your load balancer has no registered targets.
+
+## NLB
+
+*   Network Load Balancer
+    *   Supports TCP, UDP, and TCP+UDP (Layer 4), and TLS listeners.
+    *   It is architected to handle millions of requests/sec, sudden volatile traffic patterns and provides extremely low latencies.
+
+## Cross-zone load balancing
+
+If cross-zone load balancing is enabled, each of the 10 targets receives 10% of the traffic. This is because each load balancer node can route its 50% of the client traffic to all 10 targets.
+
+![ELB with cross zone load balancing enabled](./source/images/elb-cross-zone.png)
+
+If not enabled then each AZ gets 50% of the traffic which doesn't evenly distribute across targets.
+
+![ELB without cross zone load balancing enabled](./source/images/elb-no-cross-zone.png)
+
+With Application Load Balancers, cross-zone load balancing is always enabled.
+
+With Network Load Balancers and Gateway Load Balancers, cross-zone load balancing is disabled by default. After you create the load balancer, you can enable or disable cross-zone load balancing at any time.
+
+When you create a Classic Load Balancer, the default for cross-zone load balancing depends on how you create the load balancer. With the API or CLI, cross-zone load balancing is disabled by default. With the AWS Management Console, the option to enable cross-zone load balancing is selected by default. After you create a Classic Load Balancer, you can enable or disable cross-zone load balancing at any time.
+
+# EBS
+
+## What is EBS?
+
+EBS lets EC2 instances have persistent storage that doesn't go away when the instance stops, hibernates, or is terminated. EBS is like an external hard-drive for your EC2 instances. This is in contrast to EC2 **instance store volumes** which store temporary data on the same host computer.
+
+The EBS volumes are not on the same host computer but instead are attached by the network. However, EBS volumes are specific to availability zone. The average latency between EC2 instances and EBS is single digit milliseconds.
+
+![](./source/images/ec2-storage-partial.png)
+
+## Instance Types
+
+The main instance types are:
+
+*   Solid state drives (SSD) — Optimized for transactional workloads involving frequent read/write operations with small I/O size, where the dominant performance attribute is IOPS. The two types of SSD backed volumes are:
+    *   **General Purpose SSD** (**gp2** and **gp3**): a balance of price and performance. We recommend these volumes for most workloads.
+    *   **Provisioned IOPS SSD** (**io1** and **io2**) - Provides high performance for mission-critical, low-latency, or high-throughput workloads.
+        *   Amazon EBS Multi-Attach enables you to attach a single Provisioned IOPS SSD (io1 or io2) volume to multiple instances that are in the same Availability Zone.
+        *   Multi-attach only works for Nitro-enabled instances and io1 or io2. Nitro is providing some sort of hardware support. Up to 16 instances.
+        *   EBS Block Express is the next generation of Amazon EBS storage server architecture. It has been built for the purpose of meeting the performance requirements of the most demanding I/O intensive applications that run on Nitro-based Amazon EC2 instances. io2 Block Express volumes are suited for workloads that benefit from a single volume that provides sub-millisecond latency, and supports higher IOPS, higher throughput, and larger capacity than io2 volumes.
+*   Hard disk drives (HDD) — Optimized for large streaming workloads where the dominant performance attribute is throughput. The two types of HDD backed volumes are:
+
+    *   **Throughput Optimized HDD (st1)** — A low-cost HDD designed for frequently accessed, throughput-intensive workloads.
+    *   **Cold HDD (sc1)** — The lowest-cost HDD design for less frequently accessed workloads.
+
+    <!-- TODO: Discuss IOPS in more precision -->
+
+## Snapshots
+
+You can create point-in-time snapshots of EBS volumes, which are persisted to Amazon S3. Snapshots protect data for long-term durability, and they can be used as the starting point for new EBS volumes. The same snapshot can be used to instantiate as many volumes as you wish.
+
+## Encryption
+
+You can expect the same IOPS performance on encrypted volumes as on unencrypted volumes, with a minimal effect on latency. You can access encrypted volumes the same way that you access unencrypted volumes. Encryption and decryption are handled transparently, and they require no additional action from you or your applications.
+
+When you create an encrypted EBS volume and attach it to a supported instance type, the following types of data are encrypted:
+
+*   Data at rest inside the volume
+*   All data moving between the volume and the instance
+*   All snapshots created from the volume
+*   All volumes created from those snapshots
+
+EBS encrypts your volume with a data key using the industry-standard AES-256 algorithm.
+
+[EBS Volume Types docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html)
+
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html
+
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
 
 # S3
 
@@ -1168,30 +1514,6 @@ I'm not so sure about what kind of questions you might see.
 *   Amazon Neptune is a graph database for highly relational data
 *   Amazon Elasticsearch Service allows you to perform a fuzzy search on JSON data.
 
-# AWS Global Infrastructure
-
-## Traditional Data Centers
-
-Before cloud computing companies had to manage physical computation resources themselves. This meant a room full of servers, cables, and people that needed to understand how all of these things worked. This room is called a data center.
-
-## AWS vs. Traditional Data Centers
-
-With AWS you are paying to use Amazon's machines. They manage the data centers, not you.
-
-One advantage of this is that you can just pay for what you need. In the past companies would have to commit to buying servers. This is a big commitment, and it would be easy to overestimate or underestimate your needs.
-
-You might not have money to buy servers. You might only need them for one month of the year, or one hour of the day. This is why it is better to just pay for what you need with AWS.
-
-## Global Infrastructure
-
-AWS has lots of data centers so that it can meet the needs of huge companies like Amazon and Netflix.
-
-A cluster of data centers is called a **region**. Within this cluster there are more clusters called availability zones.
-
-The reason for having physically separate availability zones is that the region is more fault-tolerant in case of a natural disaster.
-
-Availabilty zones within a region are connected with redundant, high-bandwidth, low-latency networking. Data centers within the availability zone are also connected.
-
 # Amazon Simple Notification Service (SNS)
 
 ## What is SNS?
@@ -1399,3 +1721,188 @@ Kinesis Data Analytics lets you apply complicated transformations to a stream of
     *   A Kinesis Data Stream
     *   Kinesis Data Firehose
     *   A lambda hose for post-processing
+
+# Cloudwatch
+
+## What is CloudWatch?
+
+Amazon CloudWatch monitors your Amazon Web Services (AWS) resources and the applications you run on AWS in real time.
+
+## Metrics
+
+A metric represents a time-ordered set of data points that are published to CloudWatch. Think of a metric as a variable to monitor, and the data points as representing the values of that variable over time. For example, the CPU usage of a particular EC2 instance is one metric provided by Amazon EC2. The data points themselves can come from any application or business activity from which you collect data.
+
+### Namespaces
+
+Metrics belong to namespaces. This is used to isolate metrics from eachother so that you don't mistakenly aggregate metrics from different applications into the same statistic.
+
+### Dimensions
+
+A dimension is a name/value pair that is part of the identity of a metric. You can assign up to 10 dimensions to a metric. Every metric has specific characteristics that describe it, and you can think of dimensions as categories for those characteristics.
+
+**Metrics are uniquely defined by a name, a namespace, and zero or more dimensions.**
+
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#Metric
+
+## Dashboards
+
+You can use CloudWatch dashboards to create customized views of the metrics and alarms for your AWS resources.
+
+There is no limit on the number of CloudWatch dashboards in your AWS account.
+
+All dashboards are global, not Region-specific.
+
+You can share your CloudWatch dashboards with people who do not have direct access to your AWS account. This enables you to share dashboards across teams, with stakeholders, and with people external to your organization. You can even display dashboards on big screens in team areas, or embed them in Wikis and other webpages.
+
+## Logs
+
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html
+
+You can use Amazon CloudWatch Logs to monitor, store, and access your log files from Amazon Elastic Compute Cloud (Amazon EC2) instances, AWS CloudTrail, Route 53, and other sources.
+
+<!-- TODO Cloudwatch log agents -->
+
+## High-Resolution Metrics
+
+Metrics are either -
+
+*   **High resolution**: data granularity of one minute.
+*   **Standard resolution**: data granularity of one second.
+
+Every PutMetricData call for a custom metric is charged, so calling PutMetricData more often on a high-resolution metric can lead to higher charges.
+
+## EC2
+
+By default, Amazon EC2 sends metric data to CloudWatch in 5-minute periods. To send metric data for your instance to CloudWatch in 1-minute periods, you can **enable detailed monitoring on the instance**. Detailed monitoring can more quickly prompt an autoscaling event.
+
+Some information about your EC2 instance is not collected by default, you will need to enable the **CloudWatch agent** to collect these metrics. Some metrics you will need the agent for are memory and disk metrics.
+
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html
+
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/metrics-collected-by-CloudWatch-agent.html
+
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html
+
+## Using Amazon CloudWatch dashboards
+
+Amazon CloudWatch dashboards are customizable home pages in the CloudWatch console that you can use to monitor your resources in a single view, even those resources that are spread across different Regions.
+
+You can use CloudWatch dashboards to create customized views of the metrics and alarms for your AWS resources.
+
+## Alarms
+
+### Overview
+
+These are the conditions of an alarm that will be triggered when my S3 bucket averages more than 1000 objects on a day. This is a **static threshold**.
+
+![](./source/images/CloudWatch-static-threshold2.png)
+
+Instead of a static threshold we can use **anomaly detection** to detect when the number of objects in the S3 bucket is outside of its normal range.
+
+![](./source/images/CloudWatch-anomaly-detection.png)
+
+We can also use math to make new metrics from other metrics.
+
+![](./source/images/CloudWatch-metric-math.png)
+
+Here are graphs of the sum and the average of the tracked metrics.
+
+We can use the sum as the metric in our alarm. **See that multiple metrics can be combined into a single alarm using math**.
+
+![](./source/images/CloudWatch-metric-math-graphs.png)
+
+*   **metric alarms**
+    *   Monitor a single CloudWatch metric.
+    *   CloudWatch metrics can be based on a static threshold (like )
+
+# Containers on AWS
+
+## What is a Container?
+
+A container is a standardized unit of software development that contains everything that your software application needs to run, including relevant code, runtime, system tools, and system libraries. Containers are created from a read-only template called an image.
+
+Images are typically built from a Dockerfile, which is a plaintext file that specifies all of the components that are included in the container. After being built, these images are stored in a registry where they then can be downloaded and run on your cluster. For more information about container technology, see Docker basics for Amazon ECS.
+
+Multiple docker containers can run on an operating system using docker.
+
+![Docker](./source/images/container-docker.png)
+
+### Dockerfiles, Images, Containers
+
+A **dockerfile** specifies the resources for a **docker image**, you *build* the dockerfile to create a docker image.
+
+*   The dockerfile is just a text file.
+*   The docker image is like a template for the actual container.
+*   When you *run* a docker image, you have a container.
+
+Container images are stored in a container registry. The container images that ECS runs to create containers come from a container registry. Some popular registry options are Amazon ECR, Docker Hub, GitHub Container Registry, or self-hosted.
+
+![Docker](./source/images/container-registry.png)
+
+## What is Amazon Elatic Container Service?
+
+Amazon Elastic Container Service is for managing containers on AWS. There are two ways to run ECS, Fargate (EC2) or ontop of EC2 instances that you manage.
+
+Here is a diagram.
+
+![Docker](./source/images/ecs.png)
+
+Let's explain what all this means.
+
+### Task definitions, tasks
+
+**Task definitions** describe the containers that form your application. It also defines other parameters like what ports should be open and what data volumes should be used with the task.
+
+A **task** is an instantiation of a task definition. Multiple identical tasks can be created from a task definition.
+
+The diagram below is complicated, let's break it down.
+
+*   A container image is uploaded to a container registry.
+*   This container is running on Fargate, so there are no EC2 instances in the diagram.
+*   The task definition can create multiple identical tasks.
+    *   Each task can run multiple docker containers within.
+
+## Fargate vs. EC2 Backed
+
+Containers are run on clusters, which are logical groupings of tasks.
+
+There are two ways to run a cluster:
+
+*   **AWS Fargate**: You don't have to manage the underlying EC2 instances.
+*   **EC2 backed**: You can manage the backing EC2 instances.
+
+# Snow
+
+## What is the AWS Snow Family?
+
+### Storage
+
+The AWS Snow Family is a collection of physical devices that help migrate large amounts of data into and out of the cloud without depending on networks.
+
+How this works is AWS sends you a computer and you send it back to them. This might sound slow, but it can be faster than sending it over the internet if you have enough data. It would take 13 days to send 100TB at 100MB/s!
+
+That is why it makes sense to physically ship your data to Amazon and they will put it in S3 for you.
+
+### Compute
+
+Since they are sending you a computer, you can use it as a computer. Maybe you want to process your data while it is in transit.
+
+## Members of the Snow Family
+
+### AWS Snowcone
+
+Snowcone is small rugged, edge compute and data storage product. You can use Snowcone to collect, process, and transfer data to AWS, either offline by shipping the device, or online with AWS DataSync. Running applications in austere (non-data center) edge environments or where there is lack of consistent network connectivity or low bandwidth can be challenging because these locations often lack the space, power, and cooling needed for data center IT equipment. With 2 vCPUs, 4 GB of memory, and 8 TB of usable storage, Snowcone can run edge computing workloads that use Amazon EC2 instances, and store data securely.
+
+### AWS Snowball
+
+AWS Snowball, a part of the AWS Snow Family, is an edge computing, data migration, and edge storage device that comes in two options. Snowball Edge Storage Optimized devices provide both block storage and Amazon S3-compatible object storage, and 40 vCPUs. They are well suited for local storage and large scale-data transfer. Snowball Edge Compute Optimized devices provide 52 vCPUs, block and object storage, and an optional GPU for use cases like advanced machine learning and full motion video analysis in disconnected environments. You can use these devices for data collection, machine learning and processing, and storage in environments with intermittent connectivity (like manufacturing, industrial, and transportation) or in extremely remote locations (like military or maritime operations) before shipping them back to AWS. These devices may also be rack mounted and clustered together to build larger temporary installations.
+
+Snowball supports specific Amazon EC2 instance types and AWS Lambda functions, so you can develop and test in the AWS Cloud, then deploy applications on devices in remote locations to collect, pre-process, and ship the data to AWS. Common use cases include data migration, data transport, image collation, IoT sensor stream capture, and machine learning.
+
+### AWS Snowmobile
+
+AWS Snowmobile is an Exabyte-scale data transfer service used to move extremely large amounts of data to AWS. You can transfer up to 100PB per Snowmobile, a 45-foot long ruggedized shipping container, pulled by a semi-trailer truck.
+
+When your Snowmobile is on site, AWS personnel will work with your team to connect a removable, high-speed network switch from Snowmobile to your local network and you can begin your high-speed data transfer from any number of sources within your data center to the Snowmobile. After your data is loaded, Snowmobile is driven back to AWS where your data is imported into Amazon S3.
+
+Snowmobile uses multiple layers of security to help protect your data including dedicated security personnel, GPS tracking, alarm monitoring, 24/7 video surveillance, and an optional escort security vehicle while in transit. All data is encrypted with 256-bit encryption keys you manage through the AWS Key Management Service (KMS) and designed for security and full chain-of-custody of your data.
