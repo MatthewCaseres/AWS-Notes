@@ -11,7 +11,7 @@
   <summary><a href="#aws-global-infrastructure">AWS Global Infrastructure</a></summary>
     
 * [Traditional Data Centers](#traditional-data-centers)
-* [AWS vs. Traditional Data Centers](#aws-vs-traditional-data-centers)
+* [Benefits of AWS](#benefits-of-aws)
 * [Global Infrastructure](#global-infrastructure)
 </details>
 
@@ -196,25 +196,38 @@ Our software for electronic books is also licensed CC0.
 
 ## Traditional Data Centers
 
-Before cloud computing companies had to manage physical computation resources themselves. This meant a room full of servers, cables, and people that needed to understand how all of these things worked. This room is called a data center.
+Companies used to manage a room full of machines that did their computation. This is called a data center. Having a data center at the company means the company has to manage all of the machines. Below is a picture of a data center from the Wikipedia page on data centers.
 
-## AWS vs. Traditional Data Centers
+![](./source/images/Cern_datacenter.jpeg)
 
-With AWS you are paying to use Amazon's machines. They manage the data centers, not you.
+If the company wanted extra computational power they would have to buy another computer. This is a big commitment, and it is possible that the company overestimates or overestimates the amount of computational power they need. Or they might only need the computer for one month of the year, or one hour of the day.
 
-One advantage of this is that you can just pay for what you need. In the past companies would have to commit to buying servers. This is a big commitment, and it would be easy to overestimate or underestimate your needs.
+## Benefits of AWS
 
-You might not have money to buy servers. You might only need them for one month of the year, or one hour of the day. This is why it is better to just pay for what you need with AWS.
+With AWS, Amazon manages the data center and customers are able to rent and manage their infrastructure over the web. Here are six advantages of cloud computing [from AWS](https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html)
+
+*   **Trade capital expense for variable expense** – Instead of having to invest heavily in data centers and servers, only pay for what you want when you want it.
+*   **Benefit from massive economies of scale** – Providers such as AWS can achieve high economies of scale, which translates into lower pay as-you-go prices.
+*   **Stop guessing capacity** – Eliminate guessing on your infrastructure capacity needs.
+*   **Increase speed and agility** – New IT resources are only a click away, which means that you reduce the time to make those resources available to your developers from weeks to just minutes.
+*   **Stop spending money running and maintaining data centers** – Cloud computing lets you focus on your own customers, rather than on the heavy lifting of racking, stacking, and powering servers.
+*   **Go global in minutes** – Easily deploy your application in multiple regions around the world with just a few clicks.
 
 ## Global Infrastructure
 
-AWS has lots of data centers so that it can meet the needs of huge companies like Amazon and Netflix.
+### Regions
 
-A cluster of data centers is called a **region**. Within this cluster there are more clusters called availability zones.
+AWS has data centers around the world. These data centers are clustered into **regions**. A cluster of data centers is called a **region**. In the diagram below each blue dot represents a region.
 
-The reason for having physically separate availability zones is that the region is more fault-tolerant in case of a natural disaster.
+![](./source/images/Region.png)
 
-Availabilty zones within a region are connected with redundant, high-bandwidth, low-latency networking. Data centers within the availability zone are also connected.
+### Availability zones
+
+A region contains between 2-5 **availability zones**. An Availability Zone (AZ) is one or more discrete data centers with redundant power, networking, and connectivity in an AWS Region. All AZs in an AWS Region are interconnected with high-bandwidth, low-latency networking, over fully redundant, dedicated metro fiber providing high-throughput, low-latency networking between AZs. All traffic between AZs is encrypted.
+
+![](./source/images/AZs-in-region.png)
+
+If an application is partitioned across AZs, companies are better isolated and protected from issues such as power outages, lightning strikes, tornadoes, earthquakes, and more. AZs are physically separated by a meaningful distance, many kilometers, from any other AZ, although all are within 100 km (60 miles) of each other.
 
 # EC2
 
