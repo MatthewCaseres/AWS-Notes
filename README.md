@@ -118,15 +118,6 @@
 </details>
 
 <details>
-  <summary><a href="#amazon-simple-notification-service-sns">Amazon Simple Notification Service (SNS)</a></summary>
-    
-* [What is SNS?](#what-is-sns)
-* [Fanout pattern](#fanout-pattern)
-* [FIFO](#fifo)
-* [Message Filtering](#message-filtering)
-</details>
-
-<details>
   <summary><a href="#amazon-simple-queue-service-sqs">Amazon Simple Queue Service (SQS)</a></summary>
     
 * [What is SQS?](#what-is-sqs)
@@ -135,6 +126,15 @@
 * [Access Policy](#access-policy)
 * [Server-side encryption](#server-side-encryption)
 * [Dead-letter queue](#dead-letter-queue)
+</details>
+
+<details>
+  <summary><a href="#amazon-simple-notification-service-sns">Amazon Simple Notification Service (SNS)</a></summary>
+    
+* [What is SNS?](#what-is-sns)
+* [Fanout pattern](#fanout-pattern)
+* [FIFO](#fifo)
+* [Message Filtering](#message-filtering)
 </details>
 
 <details>
@@ -199,8 +199,6 @@ Our software for electronic books is also licensed CC0.
 Companies used to manage a room full of machines that did their computation. This is called a data center. Having a data center at the company means the company has to manage all of the machines. Below is a picture of a data center from the Wikipedia page on data centers.
 
 ![](./source/images/Cern_datacenter.jpeg)
-
-If the company wanted extra computational power they would have to buy another computer. This is a big commitment, and it is possible that the company overestimates or overestimates the amount of computational power they need. Or they might only need the computer for one month of the year, or one hour of the day.
 
 ## Benefits of AWS
 
@@ -318,6 +316,8 @@ Here are some differences between the two:
 
 ### Spot Fleet
 
+<!-- TODO: This isn't super clear. Maybe do a lab for YouTube with this. -->
+
 A Spot Fleet is a collection, or fleet, of Spot Instances, and optionally On-Demand Instances. This fleet of instances tried to meet the capacity specified in the spot fleet request.
 
 A Spot Instance pool is a set of unused EC2 instances with the same instance type (for example, m5.large), operating system, Availability Zone, and network platform.
@@ -336,6 +336,8 @@ The allocation strategy for the Spot Instances in your Spot Fleet determines how
 ### Request Types
 
 In the diagram below we see that a spot request launches instances. The spot request has a **request type** which determines if launched instances restart or not upon interruption (if the spot price goes above your max price or if you manually interrupt). Instances launched from a one-time spot request will go away, but instances launched from a persistent spot request will be restarted by the spot request. Thus, if you wish to terminate a persistent spot instance you must first terminate the request.
+
+<!-- TODO: I think this diagram is confusing for the thing I am trying to explain. Maybe just highlight request type!?-->
 
 ![](./source/images/EC2-spot-flow.png)
 
@@ -357,6 +359,8 @@ To determine if your instance is over-provisioned you can use the [AWS Compute O
 ## Placement groups
 
 EC2 tries to spread out your instances to minimize correlated failures. You can use placement groups to influence the placement of a group of interdependent instances to meet the needs of your workload. Types of placement groups are -
+
+<!-- TODO: can we get some pictures up in here? -->
 
 *   **Cluster** packs instances close together inside an Availability Zone. This strategy enables workloads to achieve the low-latency network performance necessary for tightly-coupled node-to-node communication that is typical of HPC applications.
 *   **Partition** multiple groups of instances where each group belongs to the same rack in a data center, and different groups belong to different racks. This strategy is typically used by large distributed and replicated workloads, such as Hadoop, Cassandra, and Kafka.
@@ -382,7 +386,9 @@ You can only have 7 partitions per AZ, so if there are three AZ in a region we c
 
 Each instance is on its own rack. Each rack has its own power source and network.
 
-You can only have 7 *instances* per AZ, so if there are six AZ in a region we can have 42 partitions. Within each partition you can have many instances.
+You can only have 7 *instances* per AZ, so if there are six AZ in a region we can have 42 total instances.
+
+Note the difference between partition and spread groups.
 
 ![EC2 Placement Spread](./source/images/ec2-placement-partition.png)
 
@@ -402,6 +408,8 @@ An elastic network interface is a logical networking component in a VPC that rep
 You can create a network interface, attach it to an instance, detach it from an instance, and attach it to another instance. The attributes of a network interface follow it as it's attached or detached from an instance and reattached to another instance. When you move a network interface from one instance to another, network traffic is redirected to the new instance.
 
 Each instance has a default network interface, called the primary network interface. You cannot detach a primary network interface from an instance.
+
+<!-- TODO: This section contains references to both S3 and VPC, which seem to come later? Troubling. -->
 
 
 <hr /> 
@@ -483,25 +491,25 @@ So maybe the network is specified by `120.247.236` and the host address is speci
 
 CIDR is a way of specifying ranges of IP addresses. In `120.247.236.0/24` the `/24` means that the first 24 bits (`120.247.236`) are the network identifier and that the network contains device ranging from `120.247.236.0` to `120.247.236.255`.
 
-If we had something like `120.247.236.38/32` then every bit in the IP address is in the network prefix, and the network contains only a single device at `120.247.236.38/32`.
+If we had something like `120.247.236.38/32` then every bit in the IP address is in the network prefix, and the network contains only a single device at `120.247.236.38`.
 
 Here is a chart from the official specification:
 
 ![](./source/images/CIDR.png)
 
-When we day 0.0.0.0/0 we are specifying all IPv4 addresses. This is can be used in AWS to say that any IP address can access a resource.
+`0.0.0.0/0` specifies all IPv4 addresses. This is can be used in AWS to say that any IP address can access a resource.
 
 The term for the number that specifies the IP range in CIDR (i.e. `/24`, `/30`, etc.) is the **netmask**.
 
 ## Private Addresses
 
-Some address ranges are private, meaning they are used for something like a private company wide 'intranet' but aren't sent over the public internet.
+Some address ranges are private, meaning they are used for something like a private company wide network but aren't sent over the public internet.
 
 These IP addressses are reserved and are in the ranges
 
 *   `10.0.0.0 – 10.255.255.255`, CIDR `10.0.0.0/8`
 *   `172.16.0.0 – 172.31.255.255`, CIDR `172.16.0.0/12`
-*   `192.168.0.0 – 192.168.255.255`, CIDR `	192.168.0.0/16`
+*   `192.168.0.0 – 192.168.255.255`, CIDR `  192.168.0.0/16 `
 
 Can you make sense of the relationship between the CIDR block and the IP range?
 
@@ -513,9 +521,9 @@ Can you make sense of the relationship between the CIDR block and the IP range?
 
 Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources into a virtual network that resembles a traditional network that you'd operate in your own data center, with the benefits of using the scalable infrastructure of AWS.
 
-VPCs are specific to a region. A single VPC spans all the availability zones in a region. You can make subnets of a VPC, subnets are specific to availability zones.
+VPCs are specific to a region but they span all the availability zones in a region. You can make subnets of a VPC, subnets are specific to availability zones. Multiple VPCs can be in the same region.
 
-<!-- TODO: subnets within -->
+<!-- TODO: make horizontal svg of below -->
 
 ![](./source/images/vpc-az.png)
 
@@ -571,6 +579,8 @@ This route table is saying that traffic to the VPC (`172.31.0.0/16`) is local to
 
 At the beginning of this section we said that every subnet needs to be associated with a route table, but our route table didn't say anything about any subnets. This is explained by the following image:
 
+<!-- TODO: Is this explained well? Maybe not. -->
+
 ![](./source/images/route-subnets.png)
 
 There is a **main route table** which is created when a new VPC is created. You do not need to explicitly associate a new subnet with a route table, there is an automatic association with the main route table.
@@ -603,51 +613,50 @@ A route table can be associated with multiple subnets, but a subnet cannot be as
 
 ## Internet Gateway
 
-Instances that have a public IP address in a subnet can connect to the internet we need an internet gateway. Let's look at a route table again to see how this works:
+Instances that have a public IP address in a subnet can connect to the internet need an internet gateway. Let's look at a route table again to see how this works:
 
 ![](./source/images/route-table.png)
 
-Traffic going to the private IPs of the CIDR block for the VPC stay `local` to the VPC. All other traffic goes to `igw-d2b99dba`, which is an internet gateway that will take this traffic to the internet. If this rule is not in the route table, then traffic will not get routed to the internet gateway even if there is a route table.
+Traffic going to the private IPs of the CIDR block for the VPC stay `local` to the VPC. All other traffic goes to `igw-d2b99dba`, which is an internet gateway that will take this traffic to the internet. If this rule is not in the route table, then traffic will not get routed to the internet gateway.
 
 The internet gateway horizontally
-s, is redundant, and is highly available. AWS manages these things. You do not need to worry about availability or scalability of your internet gateways.
+scales, is redundant, and is highly available. AWS manages these things. You do not need to worry about availability or scalability of your internet gateways.
 
 [Internet Gateway docs](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html)
 
 ## NAT devices
 
-The internet gateway connects devices with public IPs to the internet. Some things shouldn't be accessible by the internet so they don't have a public IP. They still might need to access the internet to update or install new software though!
+Network address translation (**NAT**) devices allow other devices with private IPs to initiate outbound connections to the internet over IPv4 while preventing unwanted inbound connections
 
-We solve this problem by using a NAT (Network Address Translation) device. The NAT device is in a public subnet and has a public IP that is used to communicate with the internet.
-
-**The NAT device allows devices with private IPs to initiate outbound connections to the internet over IPv4 while preventing unwanted inbound connections**
-
-NAT devices are either a **NAT instance** or a **NAT gateway**. The NAT instance has you do translation on an EC2 instance, the NAT gateway is managed by Amazon. NAT gateways are now the preferred NAT device (they are better and easier to use), but NAT instance questions can still appear on the exam.
+NAT devices are either a **NAT instance** or a **NAT gateway**. The NAT instance does translation on an EC2 instance, the NAT gateway is managed by Amazon. NAT gateways are now the preferred NAT device (they are better and easier to use), but NAT instance questions can still appear on the exam.
 
 ### NAT instances
 
-In the diagram below we see database servers that are in a private subnet and are connected to the internet using a NAT instance. The private subnet contains no routes pointing to the internet gateway, and the servers inside do not have public IPs.
+Here is a diagram of a database in a private subnet (has no public IP) connecting to the internet using a NAT instance:
 
-Here is how it works:
+![](./source/images/NAT-instance.png)
+
+Here is how it works -
 
 1.  The Database servers send a request to a public IP.
 2.  This public IP is in the range `0.0.0.0/0` and so it is routed to the NAT instance at `nat-instance-id`.
 3.  The NAT instance sends this request to the public IP and receives a response back.
 4.  The NAT instance sends the response back to the database servers on the private subnet at `10.0.1.0/24`.
 
-![](./source/images/NAT-instance.png)
+Some additional information
 
-The NAT instance has an elastic IP (an IP address that doesn't change), this is required.
-
-You must disable **source/destination checks** on your EC2 instance when using it as a NAT instance. These check if the instance is either the source or the destination of network traffic before accepting the traffic. The NAT instance is not the source/destination of the traffic, it is a middleman between the private subnet and the internet.
+*   The NAT instance has an elastic IP (an IP address that doesn't change), this is required.
+*   You must disable **source/destination checks** on your EC2 instance when using it as a NAT instance. These check if the instance is either the source or the destination of network traffic before accepting the traffic. The NAT instance is not the source/destination of the traffic, it is a middleman between the private subnet and the internet.
 
 ### NAT Gateway
 
-The NAT Gateway does NAT but is managed by AWS so you don't have to worry about managing your own EC2 instance. NAT gateways will automatically scale up to 45 Gbps, but the NAT instance is dependent on the EC2 instance type.
+The NAT Gateway is managed by AWS, there is no EC2 instance to manage. NAT gateways automatically scale up to 45 Gbps, but the NAT instance's scalability dependens on the EC2 instance type.
 
 Just like NAT instances, the NAT gateway has an elastic IP and lives in a public subnet.
 
-The NAT gateway is redundant within each availability zone, but if the availability zone experiences problems then you will lose connectivity. You might be tempted to use a single NAT gateway in a single availability zone (NAT Gateways are specific to subnets which are specific to AZ), but then everything in your region loses connectivity if you lose a single AZ. This is why it is best to have separate NAT gateways for each AZ.
+<!-- TODO: What the hell am I on about in the paragraph below -->
+
+The NAT gateway is specific to the availability zone and is redundant within that availability zone. You can use a single NAT gateway for all of your needs in a region, but this means you might lose connectivity for all regional services if the AZ containing the NAT gateway loses connectivity. The architecture is more resilient when each availability zone has a dedicated NAT gateway.
 
 A comparison of the NAT gateways and instances from the AWS documentation:
 
@@ -667,15 +676,21 @@ For IPv6 traffic we can connect to an egress-only internet gateway (instead of a
 
 ## Security Groups
 
-A security group is a virtual firewall. A firewall is a network device that decides what incoming and outgoing traffic to allow or to disallow. This firewall controls which CIDR blocks and security groups can communicate with an EC2 instances, as well as what ports this communication can happen on.
+A security group is a network device that decides what incoming and outgoing traffic to allow or to disallow for an EC2 instance.
 
-Multiple EC2 instances can have the same security group. The security group belongs to a VPC and all instances in that VPC can use the security group. All EC2 instances must have a security group.
+<!-- TODO: An image here, showing all the stuff more diagram like -->
+
+Which CIDR blocks and security groups can communicate with an EC2 instances, as well as what ports this communication can happen on.
+
+<!-- TODO: Lab -->
+
+Multiple EC2 instances can have the same security group as long as they are in the same VPC. All EC2 instances must have a security group.
 
 Here are some properties of security groups:
 
 *   You can specify allow rules but not deny rules, traffic that is not explicitly allowed is denied.
 *   There are separate rules for inbound and outbound traffic.
-*   Security groups are stateful. Suppose they sent a request to an IP address. They will be able to receive the response to their request even if they do not have an inbound security rule that would allow the traffic.
+*   Security groups are stateful. Suppose they sent a request to an IP address. They will be able to receive the response to their request even if they do not have an inbound security rule that would allow the traffic. Likewise they can respond to requests that are received even if there is no explicit rule allowing the traffic.
 
 ### Default Security Groups
 
@@ -686,9 +701,12 @@ Here are some properties of security groups:
 
 ## Network ACL (Network Access Control List)
 
+<!-- TODO: Image -->
+
 Network ACLs are also a type of firewall. Here are some differences between the network ACL and the security group.
 
 *   Network ACLs are applied to subnets, security groups are applied to EC2 instances.
+    *   Because network ACLs are applied to subnets, they are evaluated before the security group is evaluated. Traffic must make it through both the security group and network ACL.
 *   The network ACL is stateless, responses to inbound traffic are subject to the rules for outbound traffic. This is not true for security groups, where the outbound rules don't apply for responses to received inbound traffic (it is stateful).
 *   The network ACL can have both allow and deny rules. The security group only has allow rules and everything not explicitly allowed is implicitly denied.
 
@@ -699,7 +717,7 @@ Here are some similarities between the network ACL and the security group.
 *   You can associate a network ACL with multiple subnets, just like a security group can be associated with multiple EC2 instances.
 *   VPCs come with a default network ACL, just like EC2 instances come with a default security group.
 
-The default NACL that comes with the VPC allows all traffic in and out of the VPC. If you make a custom NACL, it will deny all inbound and allow all outbound traffic unless you make changes to these settings.
+The default NACL that comes with the VPC allows all traffic in and out of the VPC. Custom NACLs deny all inbound and allow all outbound traffic by default.
 
 Since there are both allow and deny rules we need a way of deciding which rule is correct when the rules conflict. To solve this, there are numbers associated with each rule, and the lowest number wins. These numbers are from 1 to 32766. AWS recommends spacing out your rules, so that you can put a rule between your rules (ex. put rule 15 between rule 10 and rule 20) in case you need to.
 
@@ -711,11 +729,11 @@ VPC endpoints enable private connections between your VPC and AWS services.
 
 Suppose we want to access an AWS service (like a database) from a private subnet. This service has a public IP that we can use. So we can use a NAT gateway to communicate from our private subnet to the internet which will communicate with the database.
 
-It would be better if we could just talk to our AWS services over a private IP address and not send any traffic into the public internet. **This is the purpose of VPC endpoints.**
+It would be better to talk to AWS services over a private IP address and not send any traffic into the public internet. **This is the purpose of VPC endpoints.**
 
 VPC endpoints are horizontally scaled, redundant, and highly available.
 
-There are two types of VPC endpoints, the type you choose is determined by the service you are accessing:
+There are two types of VPC endpoints, the type you should use is determined by the service you are accessing:
 
 *   Gateway endpoints are used for S3 and DynamoDB (two AWS services discussed in depth later).
 *   Interface endpoints are used for other services.
@@ -748,7 +766,11 @@ When peering VPCs you need to update your route tables to route traffic in the a
 
 ## Bastion Hosts
 
-You can set up a bastion host where you ssh into a public subnet. This bastion host in the public subnet will be able to ssh into private subnets.
+<!-- TODO: What is the level of depth I should give here? -->
+
+There is a situation where you want to provide SSH access to linux instances, but want to keep these instances in private subnets. There is a blog post from Amazon talking about how to use **bastion hosts** that are instances in a public subnet that have are allowed to SSH into the private subnet. This is like a layer of indirection regarding SSH. Apparently this was all necessary to log who was coming into the instances in the private subnet and having them in a public subnet might be too much of a security risk?
+
+I think VPC flow logs is the best way to log, so why bastion hosts?
 
 [Bastion hosts blog post](https://aws.amazon.com/blogs/security/how-to-record-ssh-sessions-established-through-a-bastion-host/)
 
@@ -756,7 +778,7 @@ You can set up a bastion host where you ssh into a public subnet. This bastion h
 
 https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/network-to-amazon-vpc-connectivity-options.html
 
-Although the term VPN connection is a general term, in this documentation, a VPN connection refers to the connection between your VPC and your own on-premises network. Site-to-Site VPN supports Internet Protocol security (IPsec) VPN connections.
+Although *VPN connection* is a general term, we now use VPN connection to refers to the connection between your VPC and your own on-premises network. Site-to-Site VPN supports Internet Protocol security (IPsec) VPN connections.
 
 These options are useful for integrating AWS resources with your existing on-site services (for example, monitoring, authentication, security, data or other systems) by extending your internal networks into the AWS Cloud.
 
@@ -764,16 +786,16 @@ These options are useful for integrating AWS resources with your existing on-sit
 
 You can configure a connection between a VPC and a local network, like your home network or the network for your office.
 
-The diagram below shows the connection between an AWS VPC and an on-premises network. Let's talk about some of the components:
+The diagram below shows the connection between an AWS VPC and an on-premises network.
+
+![](./source/images/vpc-site-to-site.png)
+
+Let's talk about some of the components:
 
 *   **VPN connection**: A secure connection between AWS and your on premises network.
 *   **Virtual private gateway**: Sets up a secure connection on the AWS side.
 *   **Customer gateway device**: A physical device that you set up on-premises to connect with AWS.
 *   **Customer gateway**: A resource that you create in AWS that represents the customer gateway device in your on-premises network.
-
-IPsec is just a protocol for
-
-![](./source/images/vpc-site-to-site.png)
 
 https://en.wikipedia.org/wiki/IPsec
 
@@ -936,6 +958,10 @@ After Amazon EC2 Auto Scaling marks an instance as unhealthy, it is scheduled fo
 
 # Elastic Load Balancing
 
+<!-- TODO: ELB is most general. Conceptual explanation right quick. -->
+
+<!-- Quality rating - 3. Lack of conceptual diagrams, poorly organized. -->
+
 ## What is Elastic Load Balancing?
 
 Elastic Load Balancing automatically distributes your incoming traffic across multiple targets, such as EC2 instances, containers, and IP addresses, in one or more Availability Zones. It monitors the health of its registered targets, and routes traffic only to the healthy targets.
@@ -955,13 +981,34 @@ Elastic Load Balancing supports the following load balancers: Application Load B
 
 ## ALB
 
-A load balancer serves as the single point of contact for clients. Clients send requests to the load balancer, and the load balancer sends them to targets, such as EC2 instances. To configure your load balancer, you create target groups, and then register targets with your target groups. You also create listeners to check for connection requests from clients, and listener rules to route requests from clients to the targets in one or more target groups.
+A load balancer serves as the single point of contact for clients. The load balancer distributes incoming application traffic across multiple targets, such as EC2 instances across multiple Availability Zones. This increases the availability of the application.
 
-HTTP requests and HTTP responses use header fields to send information about the HTTP messages. HTTP headers are added automatically. Header fields are colon-separated name-value pairs that are separated by a carriage return (CR) and a line feed (LF). A standard set of HTTP header fields is defined in RFC 2616, Message Headers. There are also non-standard HTTP headers available that are automatically added and widely used by the applications. Some of the non-standard HTTP headers have an X-Forwarded prefix. Application Load Balancers support the following X-Forwarded headers.
+### Listeners
+
+Load balancers have **listeners**. A listener is a process that checks for connection requests, using the protocol and port that you configure. The rules that you define for a listener determine how the load balancer routes requests to its registered targets.
+
+### Target groups
+
+Each target group is used to route requests to one or more registered targets. When you create each listener rule, you specify a target group and conditions. When a rule condition is met, traffic is forwarded to the corresponding target group. You can create different target groups for different types of requests.
+
+### Diagram
+
+The following diagram illustrates the basic components. Notice that each listener contains a default rule, and one listener contains another rule that routes requests to a different target group. One target is registered with two target groups.
+
+![](./source/images/ALB.png)
+
+<!-- TODO: There is a lot of depth on the topic, how deep to go? -->
+
+### X-Forwarded-For
+
+HTTP requests and HTTP responses use header fields to send information about the HTTP messages. HTTP headers are added automatically. Header fields are colon-separated name-value pairs that are separated by a carriage return (CR) and a line feed (LF). A standard set of HTTP header fields is defined in RFC 2616, Message Headers. There are also non-standard HTTP headers available that are automatically added and widely used by the applications. Some of the non-standard HTTP headers have an X-Forwarded prefix.
+
+The X-Forwarded-For request header is automatically added and helps you identify the IP address of a client when you use an HTTP or HTTPS load balancer. Because load balancers intercept traffic between clients and servers, your server access logs contain only the IP address of the load balancer. To see the IP address of the client, use the X-Forwarded-For request header.
+
+<!-- OK so this should be about HTTP headers I suppose? -->
 
 ### Rule condition types
 
-Rule condition types
 The following are the supported condition types for a rule:
 
 host-header
@@ -971,7 +1018,7 @@ http-header
 Route based on the HTTP headers for each request. For more information, see HTTP header conditions.
 
 http-request-method
-Route based on the HTTP request method of each request. For more information, see HTTP request method conditions.
+Route based on the HTTP request method of each request. For more information, see HTTP request method conditions. Like GET, POST, etc.
 
 path-pattern
 Route based on path patterns in the request URLs. For more information, see Path conditions.
@@ -981,8 +1028,6 @@ Route based on key/value pairs or values in the query strings. For more informat
 
 source-ip
 Route based on the source IP address of each request. For more information, see Source IP address conditions.
-
-The X-Forwarded-For request header is automatically added and helps you identify the IP address of a client when you use an HTTP or HTTPS load balancer. Because load balancers intercept traffic between clients and servers, your server access logs contain only the IP address of the load balancer.
 
 ### Lambda
 
@@ -1014,8 +1059,11 @@ There are different error codes you can get.
 ## NLB
 
 *   Network Load Balancer
+
     *   Supports TCP, UDP, and TCP+UDP (Layer 4), and TLS listeners.
     *   It is architected to handle millions of requests/sec, sudden volatile traffic patterns and provides extremely low latencies.
+
+    <!-- Why so much stuff about ALB and none about NLB? How to get information about exam weightings and particulars?-->
 
 ## Cross-zone load balancing
 
@@ -1047,9 +1095,9 @@ The EBS volumes are not on the same host computer but instead are attached by th
 
 The main instance types are:
 
-*   Solid state drives (SSD) — Optimized for transactional workloads involving frequent read/write operations with small I/O size, where the dominant performance attribute is IOPS. The two types of SSD backed volumes are:
+*   **Solid state drives (SSD)** — Optimized for transactional workloads involving frequent read/write operations with small I/O size, where the dominant performance attribute is IOPS. The two types of SSD backed volumes are:
     *   **General Purpose SSD** (**gp2** and **gp3**): a balance of price and performance. We recommend these volumes for most workloads.
-    *   **Provisioned IOPS SSD** (**io1** and **io2**) - Provides high performance for mission-critical, low-latency, or high-throughput workloads.
+    *   **Provisioned IOPS SSD** (**io1** and **io2**): Provides high performance for mission-critical, low-latency, or high-throughput workloads.
         *   Amazon EBS Multi-Attach enables you to attach a single Provisioned IOPS SSD (io1 or io2) volume to multiple instances that are in the same Availability Zone.
         *   Multi-attach only works for Nitro-enabled instances and io1 or io2. Nitro is providing some sort of hardware support. Up to 16 instances.
         *   EBS Block Express is the next generation of Amazon EBS storage server architecture. It has been built for the purpose of meeting the performance requirements of the most demanding I/O intensive applications that run on Nitro-based Amazon EC2 instances. io2 Block Express volumes are suited for workloads that benefit from a single volume that provides sub-millisecond latency, and supports higher IOPS, higher throughput, and larger capacity than io2 volumes.
@@ -1087,6 +1135,8 @@ https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html
 
 ## Buckets
 
+<!-- TODO: there should be a diagram a bit earlier -->
+
 You can upload files (pictures, videos, data sets) to an Amazon S3 **bucket**. Generally you will access the buckets and their contents programatically, but you can also use the AWS console to work with the buckets. The buckets must have a name that follows certain conventions:
 
 [Buckets Overview docs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html)
@@ -1101,7 +1151,7 @@ You can upload files (pictures, videos, data sets) to an Amazon S3 **bucket**. G
 
 ## Objects
 
-The files you store in S3 are called \***objects**. Each object has a **key** which is a unique identifier within the bucket, and associated with this key is the **value** which is the stored file.
+The files you store in S3 are called **objects**. Each object has a **key** which is a unique identifier within the bucket, and associated with this key is the **value** which is the stored file.
 
 Objects can be up to 5TB in size but you can only upload 5GB at a time so you will need to use a multi-part upload for files larger than 5GB.
 
@@ -1111,7 +1161,7 @@ Folders can be represented within S3 -
 
 ![](./source/images/s3-folder.png)
 
-S3 only supports buckets and objects (the files are a lie!) and this filesystem interface is a convenience provided to users of the console.
+S3 only supports buckets and objects (the folders are a lie!) and this filesystem interface is a convenience provided to users of the console.
 
 The object key refers to the entire "path" to the object.
 So the object key might be "folder/fileInFolder.png".
@@ -1131,6 +1181,8 @@ Bucket configurations are eventually consistent, so if you enable versioning you
 [Welcome to S3 docs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html)
 
 ## Encryption
+
+<!-- TODO: Is this bullet point giving the right level of depth? Is it currently verbose? -->
 
 You can do encryption server-side or client-side, and within server-side you have several options.
 
@@ -1154,7 +1206,7 @@ When using the REST API for S3 set the `x-amz-server-side-encryption` request he
 
 When using the REST API set the `x-amz-server-side-encryption` request header to `aws:kms`.
 
-AWS KMS is the AWS Key Management Service and it manages keys for encryption. Using this service to encrypt S3 data via SSE-KMS will provide a better audit trail than using SSE-S3.
+AWS KMS is the AWS Key Management Service and it manages keys for encryption. **Using this service to encrypt S3 data via SSE-KMS will provide a better audit trail than using SSE-S3.**
 
 [KMS docs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html)
 
@@ -1184,15 +1236,19 @@ Users are granted privileges through AWS IAM.
 
 ## CORS
 
+<!-- TODO: Should this be right here? -->
+
 Suppose we have a website https://example1.com, and someone else has an api at https://example2.com/api. The owner of example2.com might not want you using their api. By default the browser will prevent this unless the owner of example2.com explicitly allows it using CORS (Cross Origin Resource Sharing).
 
 The implementation is that the browser will send a preflight request asking example2.com/api if example1.com can access it.
 
 If you get an error like `No 'Access-Control-Allow-Origin' header is present on the requested resource.` then you have a CORS error.
 
-[An article on CORS]: # "https://medium.com/@buddhiv/what-is-cors-or-cross-origin-resource-sharing-eccbfacaaa30"
+[an article on cors]: # "https://medium.com/@buddhiv/what-is-cors-or-cross-origin-resource-sharing-eccbfacaaa30"
 
 ## Versioning
+
+*TODO: can we get a diagram?*
 
 Versioning helps you prevent accidentally overwriting or deleting a file. In a versioning enabled bucket if the same object key is written multiple times, all of the writes will be recorded with the same object key but having different version IDs.
 
@@ -1218,11 +1274,13 @@ MFA delete requires two forms of authentication together:
 
 This means that if your account is compromised that the attacker will not be able to delete any object versions.
 
-The bucket owner, which is the AWS account that created the bucket (root account), and all authorized IAM users can enable versioning. However, only the bucket owner (root account, not IAM user) can enable MFA delete.
+The bucket owner, which is the AWS account that created the bucket (root account, yes the root account pays the bill and the owner of the bucket is the literal account and not any particular user), and all authorized IAM users can enable versioning. However, only the bucket owner (root account, not IAM user) can enable MFA delete.
 
 You cannot enable MFA Delete using the AWS Management Console, you must use the CLI.
 
 ## Storage Classes
+
+<!-- Should I replace this with a table? -->
 
 *   **S3 Standard**
     *   Designed for frequently accessed data.
@@ -1231,6 +1289,7 @@ You cannot enable MFA Delete using the AWS Management Console, you must use the 
 *   **S3 Standard-IA**
     *   Long-lived infrequent accessed data.
     *   Per-GB retrieval fees, which is why you use this for infrequently accessed data.
+    *   Replicated across multiple availability zones for increased availability.
 *   **S3 One Zone-IA**
     *   Long-lived, infrequently accessed, non-critical data.
     *   Only stored in one AZ, not resilient to loss of AZ.
@@ -1239,13 +1298,18 @@ You cannot enable MFA Delete using the AWS Management Console, you must use the 
 
 The S3 Standard-IA and S3 One Zone-IA storage classes are suitable for objects larger than 128 KB that you plan to store for at least 30 days. If an object is less than 128 KB, Amazon S3 charges you for 128 KB. If you delete an object before the end of the 30-day minimum storage duration period, you are charged for 30 days.
 
+<!-- TODO: write a question about this -->
+
 *   **S3 Intelligent-Tiering**
     *   Use for long-lived data with changing or unknown access patterns.
     *   Automatically puts the object in an optimal storage class based on historical access patterns.
     *   Monitoring and automation fees apply per object.
+    *   S3 Intelligent-Tiering works by storing objects in four access tiers: two low latency access tiers optimized for frequent and infrequent access, and two opt-in archive access tiers designed for asynchronous access that are optimized for rare access. Objects uploaded or transitioned to S3 Intelligent-Tiering are automatically stored in the Frequent Access tier. S3 Intelligent-Tiering works by monitoring access patterns and then moving the objects that have not been accessed in 30 consecutive days to the Infrequent Access tier. Once you have activated one or both of the archive access tiers, S3 Intelligent-Tiering will move objects that haven’t been accessed for 90 consecutive days to the Archive Access tier and then after 180 consecutive days of no access to the Deep Archive Access tier. If the objects are accessed later, S3 Intelligent-Tiering moves the objects back to the Frequent Access tier. If the object you are retrieving is stored in the Archive or Deep Archive tiers, before you can retrieve the object you must first restore a copy using RestoreObject.
     *   No retrieval fees.
 *   **S3 Glacier**
     *   Use for archives where portions of the data might need to be retrieved in minutes. Data stored in the S3 Glacier storage class has a minimum storage duration period of 90 days and can be accessed in as little as 1-5 minutes using expedited retrieval. If you have deleted, overwritten, or transitioned to a different storage class an object before the 90-day minimum, you are charged for 90 days.
+        *   the retrieval options for glacier is expedited, standard (3-5 hours), bulk. If not specified then standard retrieval will happen by default.
+        *   The expedited retrieval option relies on capacity that you can purchase.
     *   Per GB retrieval fees apply. You must first restore archived objects before you can access them.
 *   **S3 Glacier Deep Archive**
     *   Use for archiving data that rarely needs to be accessed. Data stored in the S3 Glacier Deep Archive storage class has a minimum storage duration period of 180 days and a default retrieval time of 12 hours. If you have deleted, overwritten, or transitioned to a different storage class an object before the 180-day minimum, you are charged for 180 days.
@@ -1322,7 +1386,7 @@ NoSQL databases don't have the rectangular tables and relationships between tabl
     "photos": [
       {
         "id": 1,
-        "caption": "selfie",
+        "caption": "selfie"
       }
     ]
   },
@@ -1330,10 +1394,8 @@ NoSQL databases don't have the rectangular tables and relationships between tabl
     "id": 2,
     "username": "dog",
     "password": "woof",
-    "likes": [
-      1
-    ]
-  },
+    "likes": [1]
+  }
 ]
 ```
 
@@ -1393,7 +1455,7 @@ Let's talk features.
 ### Availability and durability
 
 *   Backups allow you to restore your database from a previous state. There are two types.
-    *   Automated backups: Allows you to recover to a point in time from the retention period The retention period can be configured to be up to 35 days.
+    *   Automated backups: Allows you to recover to a point in time from the retention period. The retention period can be configured to be up to 35 days.
     *   Database snapshots: User initiated snapshots that are stored in S3 and must be manually deleted.
 *   You can deploy to multiple availability zones (AZs). This makes a primary instance in one AZ which replicates data to an instance in another AZ. If the infrastructure in your primary AZ fails, RDS will automatically transfer to the replica with minimal downtime.
 
@@ -1407,7 +1469,7 @@ Let's talk features.
 
 ### Manageability
 
-AWS provides Amazon CloudWatch metics for your database instances at no extra charge.
+AWS provides Amazon CloudWatch metrics for your database instances at no extra charge.
 
 [RDS features overview](https://aws.amazon.com/rds/features/)
 
@@ -1441,6 +1503,8 @@ Aurora Global Database allows for you to physically replicate your database acro
 
 You can encrypt data at rest and in transit as you would in other RDS instance types.
 
+<!-- TODO: this seems repetitive, how should I structure it? -->
+
 ### Aurora Serverless
 
 There is a serverless offering that autoscales to your required capacity. Ideal for unknown or variable workloads.
@@ -1451,7 +1515,7 @@ https://aws.amazon.com/rds/aurora/faqs/
 
 Amazon DynamoDB is a serverless NoSQL database. With RDS you have to choose what kind of EC2 instance Amazon will manage your database on. With DynamoDB we don't worry about that. We can scale up and down as much as we like without worrying about the size of an EC2 instance.
 
-We don't have to worry about availability or fault tolerance, they are built right in.
+We don't have to worry about availability or fault tolerance, that is part of the offering.
 
 ### Performance
 
@@ -1466,6 +1530,7 @@ DynamoDB global tables replicate tables across regions to scale capacity and all
 *   DynamoDB has two modes, on-demand and provisioned.
     *   Use on-demand if you don't know how much peak capacity you need.
     *   Provisioned will automatically scale, but up to a certain maximum capacity (unlike on-demand). Provisioned capacity is more cost effective when you are able to predict the max capacity.
+    *   More depth here: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.ProvisionedThroughput.Manual
 *   When data is modified in DynamoDB you can capture it in a DynamoDB **stream**. This will capture writes/updates/deletes from a DynamoDB table. You can use the stream with AWS Lambda to perform actions in response to changes made to the table.
 
 ### Enterprise Ready
@@ -1493,15 +1558,15 @@ You pay per hour with the payment rate determined by the size of your compute no
 
 ## Elasticache
 
-Amazon Elasticache makes it easy to host an in-memory database (IMDB) in the cloud. It supports two types of databases, Redis and Memcached. Redis is more popular and more flexible than Memcached.
+<!-- TODO: is this order good -->
 
-Elasticache gives you sub-millisecond performance. Use Elasticache if you need low latency.
+Amazon Elasticache makes it easy to host an in-memory database (IMDB) in the cloud. Use Elasticache if you need low latency, it has sub-millisecond performance.
 
-You can cache results from a database to improve latency and performance, or you can just use it as a fast key-value store for things like user-authentication tokens.
+It supports two types of databases, Redis and Memcached. Redis is more popular and more flexible than Memcached.
 
-Elaticache stores simple data, not complex related tables.
+Use cases include cacheing results from a database to improve latency and performance, or use as a fast key-value store for things like user-authentication tokens.
 
-To set up Elasticache you tell AWS what size instance you need. They provision the resources and manage the installation for you (installing patches, server maintenance, etc).
+Elasticache stores simple data, not complex related tables. To set up Elasticache you tell AWS what size instance you need. They provision the resources and manage the installation for you (installing patches, server maintenance, etc).
 
 Elasticache resources belong to a VPC so you can use security groups and network ACLs to control access to your instance.
 
@@ -1514,6 +1579,76 @@ I'm not so sure about what kind of questions you might see.
 *   AWS Database Migration Service is for migrating databases.
 *   Amazon Neptune is a graph database for highly relational data
 *   Amazon Elasticsearch Service allows you to perform a fuzzy search on JSON data.
+
+# Amazon Simple Queue Service (SQS)
+
+## What is SQS?
+
+Amazon Simple Queue Service helps you decouple message producers and message consumers.
+
+Suppose you have an online voting application that will have millions of people voting at once. It would be hard to handle millions of messages per second, but with SQS you can have a queue that stores all the votes and then you process them as they come.
+
+A queue is just a fancy word for a line, you take all the votes and you make them sit in a line until you are ready to process them, just like lines work at the grocery store.
+
+[What are possible use cases for Amazon SQS - StackOverflow
+](https://stackoverflow.com/questions/31752503/what-are-the-possible-use-cases-for-amazon-sqs-or-any-queue-service)
+
+## Standard vs. FIFO
+
+There are standard and there are FIFO queues.
+
+*   Standard queues
+    *   Nearly unlimited number of transactions per second.
+    *   Messages are delivered at least once, but sometimes more than once.
+    *   Best effort ordering. Occasionally, messages will be delivered out of the order they were sent in.
+    *   Useful for very high throughput.
+*   FIFO queues
+    *   Up to 3000 messages per second, standard is nearly unlimited.
+    *   First-in-first-out means the first message in the first message out of the queue, compare this to standard queues which are best effort ordering.
+    *   No duplicates, messages delivered exactly once.
+
+## Configuration
+
+*   **Message Visibility Timeout**: The queue holds messages but the consumer must ask for the message, it doesn't "push" messages. Once a consumer asks for a message, the message disappears so that no other consumers ask for the same message while it is being processed.
+    *   The default visibility is 30 seconds, so once the message is consumed you have 30 seconds to process **and delete** the message before it will be returned to the queue.
+    *   If you do not delete the message before the timeout is up it will be returned to the queue.
+*   **Message Retention Period**: If a message is not deleted from the queue it will stay until the message retention period is over.
+    *   The default message retention period is 4 days, so after 4 days a message will automatically be deleted from the queue.
+*   **Delivery Delay**: By default the delay is 0 seconds. When you send a message to the queue the consumers can't access it until the delivery delay is over.
+
+## Access Policy
+
+<!-- TODO: Expand this -->
+
+You can manage access with IAM, but just like S3 buckets have their own access policies, SQS queues have their own access policies written in JSON. Here is the default policy saying that only the owner of the queue can send and receive messages from the queue.
+
+    {
+      "Version": "2008-10-17",
+      "Id": "__default_policy_ID",
+      "Statement": [
+        {
+          "Sid": "__owner_statement",
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "889703873633"
+          },
+          "Action": [
+            "SQS:*"
+          ],
+          "Resource": "arn:aws:sqs:us-east-2:889703873633:"
+        }
+      ]
+    }
+
+## Server-side encryption
+
+SQS messages are encrypted in-flight by default, but not at rest. You can encrypt them at rest with server-side encryption and amazon will encrypt the messages in the queue with KMS and decrypt them when received by a consumer.
+
+## Dead-letter queue
+
+We usually want to delete a message after using it, when a message has been received too many times we think something is wrong. We can configure how many times a message is received before we send it to the dead-letter queue.
+
+The dead letter queue is just another SQS queue. You can look at the messages in the DLQ to see what is failing to process. It is recommended to set the DLQ retention period to be longer than your other queues, because it's expiration is based on when it entered the first queue, not when it entered the DLQ.
 
 # Amazon Simple Notification Service (SNS)
 
@@ -1570,7 +1705,7 @@ Messages sent from an SNS topic can include a `MessageAttributes` field that can
          "Value": "order_placed"
       },
       "price_usd": {
-         "Type": "Number", 
+         "Type": "Number",
          "Value":210.75
       }
    }
@@ -1581,84 +1716,14 @@ In the subscription filter we can define a JSON policy that determines which mes
 
 ```json
 {
-   "store": ["example_corp"],
-   "event": [{"anything-but": "order_cancelled"}],
-   "customer_interests": "soccer",
-   "price_usd": [{"numeric": [">=", 100]}]
+  "store": ["example_corp"],
+  "event": [{ "anything-but": "order_cancelled" }],
+  "customer_sport": "soccer",
+  "price_usd": [{ "numeric": [">=", 100] }]
 }
 ```
 
 This should be detailed enough for the exam, but you can learn more in [the documentation](https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html).
-
-# Amazon Simple Queue Service (SQS)
-
-## What is SQS?
-
-Amazon Simple Queue Service helps you decouple message producers and message consumers.
-
-Suppose you have an online voting application that will have millions of people voting at once. It would be hard to handle millions of messages per second, but with SQS you can have a queue that stores all the votes and then you process them as they come.
-
-A queue is just a fancy word for a line, you take all the votes and you make them sit in a line until you are ready to process them, just like lines work at the grocery store.
-
-[What are possible use cases for Amazon SQS - StackOverflow
-](https://stackoverflow.com/questions/31752503/what-are-the-possible-use-cases-for-amazon-sqs-or-any-queue-service)
-
-## Standard vs. FIFO
-
-There are standard and there are FIFO queues.
-
-*   Standard queues
-    *   Nearly unlimited number of transactions per second.
-    *   Messages are delivered at least once, but sometimes more than once.
-    *   Best effort ordering. Occasionally, messages will be delivered out of the order they were sent in.
-    *   Useful for very high throughput.
-*   FIFO queues
-    *   Up to 3000 messages per second, standard is nearly unlimited.
-    *   First-in-first-out means the first message in the first message out of the queue, compare this to standard queues which are best effort ordering.
-    *   No duplicates, messages delivered exactly once.
-
-## Configuration
-
-*   **Message Visibility Timeout**: The queue holds messages but the consumer must ask for the message, it doesn't "push" messages. Once a consumer asks for a message, the message disappears so that no other consumers ask for the same message while it is being processed.
-    *   The default visibility is 30 seconds, so once the message is consumed you have 30 seconds to process **and delete** the message before it will be returned to the queue.
-    *   If you do not delete the message before the timeout is up it will be returned to the queue.
-*   **Message Retention Period**: You need to delete your message from the queue once you process it otherwise it stays in the queue, but for how long? It stays until the message retention period is over.
-    *   The default message retention period is 4 days, so after 4 days a message will automatically be deleted from the queue.
-*   **Delivery Delay**: When you send a message to the queue the consumers can't access it until the delivery delay is over. By default the delay is 0 seconds.
-
-## Access Policy
-
-<!-- TODO: Expand this -->
-
-You can manage access with IAM, but just like S3 buckets have their own access policies, SQS queues have their own access policies written in JSON. Here is the default policy saying that only the owner of the queue can send and receive messages from the queue.
-
-    {
-      "Version": "2008-10-17",
-      "Id": "__default_policy_ID",
-      "Statement": [
-        {
-          "Sid": "__owner_statement",
-          "Effect": "Allow",
-          "Principal": {
-            "AWS": "889703873633"
-          },
-          "Action": [
-            "SQS:*"
-          ],
-          "Resource": "arn:aws:sqs:us-east-2:889703873633:"
-        }
-      ]
-    }
-
-## Server-side encryption
-
-SQS messages are encrypted in-flight by default, but not at rest. You can encrypt them at rest with server-side encryption and amazon will encrypt the messages in the queue with KMS and decrypt them when received by a consumer.
-
-## Dead-letter queue
-
-We usually want to delete a message after using it, when a message has been received too many times we think something is wrong. We can configure how many times a message is received before we send it to the dead-letter queue.
-
-The dead letter queue is just another SQS queue. You can look at the messages in the DLQ to see what is failing to process. It is recommended to set the DLQ retention period to be longer than your other queues, because it's expiration is based on when it entered the first queue, not when it entered the DLQ.
 
 # Amazon Kinesis
 
@@ -1681,9 +1746,9 @@ We don't worry about Kinesis Video Streams for this exam.
 
 ### Shards
 
-For Kinesis Data Streams you provision capacity in units called *shards*. The more shards you provision, the more it costs. One shard provides 1MB/sec data input and 2MB/sec data output along with 1000 PUT records per second. So if we had 10 shards that is 10MB/sec input, 20MB/sec output, and 10,000 PUT records per second.
+Shards provision capacity in Kinesis Data Streams. The more shards you provision, the more it costs. One shard provides 1MB/sec data input and 2MB/sec data output along with 1,000 PUT records per second. So if we had 10 shards that is 10MB/sec input, 20MB/sec output, and 10,000 PUT records per second.
 
-We can increase the data output of a shard by enabling *enhanced fan-out*, which lets you read 2MB/sec **per consumer** from a shard instead of 2MB/sec across all consumers.
+We can increase the data output of a shard by enabling **enhanced fan-out**, which lets you read 2MB/sec per consumer from a shard instead of 2MB/sec across all consumers.
 
 ### Records
 
@@ -1693,9 +1758,11 @@ A **record** is the unit of data stored in an Amazon Kinesis Data stream. Record
 *   **Partition key**: The partition key is defined by the data producer while adding data to the stream and determines which shard the record will go to.
 *   **Sequence number**: A sequence number is a unique identifier for each record that Amazon Kinesis adds when data is added to the stream
     *   Sequence numbers from the same shard are ordered.
-    *   Use a partition key to messages from the same message sender a consistent shard, which will make the sequence numbers for this messager ordered.
+    *   Use a partition key for messages from the same messenger a consistent shard, which will make the sequence numbers for this messager ordered.
 
 ### Producers and Consumers
+
+<!-- TODO: remove buzzwords and replace with understanding if possible. -->
 
 Data can be loaded into Kinesis Data streams using the API over HTTPS, the Kinesis Producer Library, and the Kinesis Agent.
 
@@ -1703,9 +1770,9 @@ You can read from data streams using AWS Lambda, Kinesis Data Analytics, Kinesis
 
 ## Kinesis Data Firehose
 
-Kinesis Data Firehose is fully managed, unlike Kinesis Data Streams. Kinesis Data Firehose will automatically scale to match the throughput of your data and requires no administration.
+Kinesis Data Firehose will automatically scale to match the throughput of your data and requires no provisioning of capacity. It is fully managed and requires no administration.
 
-Firehose can't send to a custom application. We can only send our data to Amazon S3, Amazon Redshift, Amazon Elasticsearch Service, HTTP, and some third party vendors that have integrations like MongoDB.
+Firehose can't send to a custom application, it works with Amazon S3, Amazon Redshift, Amazon Elasticsearch Service, HTTP, and some third party vendors that have integrations like MongoDB.
 
 Kinesis Data Firehose is near-realtime, data is loaded within 60 seconds of being received. You can specify the **buffer size** and the **buffer interval** to determine how much data needs to be collected or how long to wait before delivering the data. For S3 the buffer size is between 1 and 128 MB and the buffer interval is between 60 and 900 seconds.
 
@@ -1734,6 +1801,8 @@ Amazon CloudWatch monitors your Amazon Web Services (AWS) resources and the appl
 A metric represents a time-ordered set of data points that are published to CloudWatch. Think of a metric as a variable to monitor, and the data points as representing the values of that variable over time. For example, the CPU usage of a particular EC2 instance is one metric provided by Amazon EC2. The data points themselves can come from any application or business activity from which you collect data.
 
 ### Namespaces
+
+<!-- TODO: This is too much depth to be explained so poorly. Do you have a diagram? -->
 
 Metrics belong to namespaces. This is used to isolate metrics from eachother so that you don't mistakenly aggregate metrics from different applications into the same statistic.
 
