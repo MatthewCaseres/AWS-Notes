@@ -1,5 +1,9 @@
 # Elastic Load Balancing
 
+<!-- TODO: ELB is most general. Conceptual explanation right quick. -->
+
+<!-- Quality rating - 3. Lack of conceptual diagrams, poorly organized. -->
+
 ## What is Elastic Load Balancing?
 
 Elastic Load Balancing automatically distributes your incoming traffic across multiple targets, such as EC2 instances, containers, and IP addresses, in one or more Availability Zones. It monitors the health of its registered targets, and routes traffic only to the healthy targets.
@@ -8,24 +12,45 @@ Using a load balancer increases the availability and fault tolerance of your app
 
 Elastic Load Balancing supports the following load balancers: Application Load Balancers, Network Load Balancers, Gateway Load Balancers, and Classic Load Balancers.
 
-* Application Load Balancer
-  * Supports HTTP and HTTPS (Secure HTTP) protocols.
-  * Advanced routing.
-* Network Load Balancer
-  * Supports TCP, UDP, and TCP+UDP (Layer 4), and TLS listeners.
-  * It is architected to handle millions of requests/sec, sudden volatile traffic patterns and provides extremely low latencies.
-* Classic load balancer
-  * HTTP, HTTPS (Secure HTTP), SSL (Secure TCP) and TCP protocols.
+- Application Load Balancer
+  - Supports HTTP and HTTPS (Secure HTTP) protocols.
+  - Advanced routing.
+- Network Load Balancer
+  - Supports TCP, UDP, and TCP+UDP (Layer 4), and TLS listeners.
+  - It is architected to handle millions of requests/sec, sudden volatile traffic patterns and provides extremely low latencies.
+- Classic load balancer
+  - HTTP, HTTPS (Secure HTTP), SSL (Secure TCP) and TCP protocols.
 
 ## ALB
 
-A load balancer serves as the single point of contact for clients. Clients send requests to the load balancer, and the load balancer sends them to targets, such as EC2 instances. To configure your load balancer, you create target groups, and then register targets with your target groups. You also create listeners to check for connection requests from clients, and listener rules to route requests from clients to the targets in one or more target groups.
+A load balancer serves as the single point of contact for clients. The load balancer distributes incoming application traffic across multiple targets, such as EC2 instances across multiple Availability Zones. This increases the availability of the application.
 
-HTTP requests and HTTP responses use header fields to send information about the HTTP messages. HTTP headers are added automatically. Header fields are colon-separated name-value pairs that are separated by a carriage return (CR) and a line feed (LF). A standard set of HTTP header fields is defined in RFC 2616, Message Headers. There are also non-standard HTTP headers available that are automatically added and widely used by the applications. Some of the non-standard HTTP headers have an X-Forwarded prefix. Application Load Balancers support the following X-Forwarded headers.
+### Listeners
+
+Load balancers have **listeners**. A listener is a process that checks for connection requests, using the protocol and port that you configure. The rules that you define for a listener determine how the load balancer routes requests to its registered targets.
+
+### Target groups
+
+Each target group is used to route requests to one or more registered targets. When you create each listener rule, you specify a target group and conditions. When a rule condition is met, traffic is forwarded to the corresponding target group. You can create different target groups for different types of requests.
+
+### Diagram
+
+The following diagram illustrates the basic components. Notice that each listener contains a default rule, and one listener contains another rule that routes requests to a different target group. One target is registered with two target groups.
+
+![](./images/ALB.png)
+
+<!-- TODO: There is a lot of depth on the topic, how deep to go? -->
+
+### X-Forwarded-For
+
+HTTP requests and HTTP responses use header fields to send information about the HTTP messages. HTTP headers are added automatically. Header fields are colon-separated name-value pairs that are separated by a carriage return (CR) and a line feed (LF). A standard set of HTTP header fields is defined in RFC 2616, Message Headers. There are also non-standard HTTP headers available that are automatically added and widely used by the applications. Some of the non-standard HTTP headers have an X-Forwarded prefix.
+
+The X-Forwarded-For request header is automatically added and helps you identify the IP address of a client when you use an HTTP or HTTPS load balancer. Because load balancers intercept traffic between clients and servers, your server access logs contain only the IP address of the load balancer. To see the IP address of the client, use the X-Forwarded-For request header.
+
+<!-- OK so this should be about HTTP headers I suppose? -->
 
 ### Rule condition types
 
-Rule condition types
 The following are the supported condition types for a rule:
 
 host-header
@@ -35,7 +60,7 @@ http-header
 Route based on the HTTP headers for each request. For more information, see HTTP header conditions.
 
 http-request-method
-Route based on the HTTP request method of each request. For more information, see HTTP request method conditions.
+Route based on the HTTP request method of each request. For more information, see HTTP request method conditions. Like GET, POST, etc.
 
 path-pattern
 Route based on path patterns in the request URLs. For more information, see Path conditions.
@@ -45,8 +70,6 @@ Route based on key/value pairs or values in the query strings. For more informat
 
 source-ip
 Route based on the source IP address of each request. For more information, see Source IP address conditions.
-
-The X-Forwarded-For request header is automatically added and helps you identify the IP address of a client when you use an HTTP or HTTPS load balancer. Because load balancers intercept traffic between clients and servers, your server access logs contain only the IP address of the load balancer.
 
 ### Lambda
 
@@ -58,7 +81,7 @@ By default, an Application Load Balancer routes each request independently to a 
 
 ### Misc
 
-In order to make sure that ELB can scale to whatever volume you have and burst to whatever volume you suddenly encounter, AWS assigns a 'static' DNS hostname (e.g. MyDomainELB-918273645.us-east-1.elb.amazonaws.com). That hostname points to multiple IP addresses. 
+In order to make sure that ELB can scale to whatever volume you have and burst to whatever volume you suddenly encounter, AWS assigns a 'static' DNS hostname (e.g. MyDomainELB-918273645.us-east-1.elb.amazonaws.com). That hostname points to multiple IP addresses.
 
 https://stackoverflow.com/questions/35313134/assigning-static-ip-address-to-aws-load-balancer
 
@@ -68,18 +91,21 @@ If your target is not in the `InService` state it might be failing health checks
 
 There are different error codes you can get.
 
-* 4xx errors are caused by the client. 
-  * `HTTP 400: Bad request` 
-  * `HTTP: 401: Unauthorized`
-* 5xx errors means that there is a server-side error.
-  * `HTTP 500: Internal server error`
-  * `HTTP 503: Service unavailable` - this means your load balancer has no registered targets.
+- 4xx errors are caused by the client.
+  - `HTTP 400: Bad request`
+  - `HTTP: 401: Unauthorized`
+- 5xx errors means that there is a server-side error.
+  - `HTTP 500: Internal server error`
+  - `HTTP 503: Service unavailable` - this means your load balancer has no registered targets.
 
 ## NLB
 
-* Network Load Balancer
-  * Supports TCP, UDP, and TCP+UDP (Layer 4), and TLS listeners.
-  * It is architected to handle millions of requests/sec, sudden volatile traffic patterns and provides extremely low latencies.
+- Network Load Balancer
+
+  - Supports TCP, UDP, and TCP+UDP (Layer 4), and TLS listeners.
+  - It is architected to handle millions of requests/sec, sudden volatile traffic patterns and provides extremely low latencies.
+
+  <!-- Why so much stuff about ALB and none about NLB? How to get information about exam weightings and particulars?-->
 
 ## Cross-zone load balancing
 
