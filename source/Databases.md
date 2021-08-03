@@ -41,7 +41,7 @@ NoSQL databases don't have the rectangular tables and relationships between tabl
     "photos": [
       {
         "id": 1,
-        "caption": "selfie",
+        "caption": "selfie"
       }
     ]
   },
@@ -49,10 +49,8 @@ NoSQL databases don't have the rectangular tables and relationships between tabl
     "id": 2,
     "username": "dog",
     "password": "woof",
-    "likes": [
-      1
-    ]
-  },
+    "likes": [1]
+  }
 ]
 ```
 
@@ -60,7 +58,7 @@ Since the dog had no photos there is no attribute for photos. Different items ha
 
 **NoSQL drawbacks:** We have all the data as the relational database previously discussed. A pain point of NoSQL databases is the lack of flexibility in querying. Consider that we can easily access all the likes of the dog, but that our photo doesn't know who liked it. We could solve this by including likes on the photo, but what if a user has 1000 photos that each get 1,000,000 likes? Should we really store all that information in one place? NoSQL requires a different way of thinking. You need to know how you are going to use your data before setting up the tables. With relational databases SQL gives us a lot of flexibility in how we write our queries.
 
-**NoSQL advantages:** NoSQL databases are built for scalability and performance. With relational databases you typically scale vertically by using a bigger machine to host your database. With NoSQL you scale horizontally, adding servers as you need. 
+**NoSQL advantages:** NoSQL databases are built for scalability and performance. With relational databases you typically scale vertically by using a bigger machine to host your database. With NoSQL you scale horizontally, adding servers as you need.
 
 ### Online transaction processing vs. Online analytical processing
 
@@ -82,12 +80,11 @@ Amazon Redshift is column oriented, databases on RDS are row oriented. You can l
 
 Computers have memory (RAM) and storage. Storage is either Solid-state drive (SSD) or hard disk drive (HDD).
 
-Memory is everything your computer is currently thinking about. Storage is everything your computer knows. 
+Memory is everything your computer is currently thinking about. Storage is everything your computer knows.
 
 It is fast to access something from memory, it is slow to access something from storage. This is why more RAM speeds up computers, they access storage less often.
 
 Relational databases store all of their data in storage, what if we had a database that stored everything in memory? We would have faster access times. This is why we use in-memory databases (IMDB).
-
 
 ## Amazon Relational Database Service (RDS)
 
@@ -95,27 +92,27 @@ Amazon RDS manages a server with a relational database installation and automate
 
 RDS supports the following databases:
 
-* MySQL
-* MariaDB
-* Oracle
-* SQL Server
-* PostgreSQL
+- MySQL
+- MariaDB
+- Oracle
+- SQL Server
+- PostgreSQL
 
 Let's talk features.
 
 ### Scalability
 
-* Scale storage on the fly with no downtime.
-* **Read replicas** - a read-only replica of your database. Serve high-volume read traffic from the read-replica and the primary database for increased overall read capacity.
+- Scale storage on the fly with no downtime.
+- **Read replicas** - a read-only replica of your database. Serve high-volume read traffic from the read-replica and the primary database for increased overall read capacity.
 
 ![RDS Read Replicas Diagram](./images/rds-read-replica.png)
 
 ### Availability and durability
 
-* Backups allow you to restore your database from a previous state. There are two types.
-  * Automated backups: Allows you to recover to a point in time from the retention period The retention period can be configured to be up to 35 days.
-  * Database snapshots: User initiated snapshots that are stored in S3 and must be manually deleted.
-* You can deploy to multiple availability zones (AZs). This makes a primary instance in one AZ which replicates data to an instance in another AZ. If the infrastructure in your primary AZ fails, RDS will automatically transfer to the replica with minimal downtime.
+- Backups allow you to restore your database from a previous state. There are two types.
+  - Automated backups: Allows you to recover to a point in time from the retention period. The retention period can be configured to be up to 35 days.
+  - Database snapshots: User initiated snapshots that are stored in S3 and must be manually deleted.
+- You can deploy to multiple availability zones (AZs). This makes a primary instance in one AZ which replicates data to an instance in another AZ. If the infrastructure in your primary AZ fails, RDS will automatically transfer to the replica with minimal downtime.
 
 ![RDS Multi-AZ Diagram](./images/rds-multi-az.png)
 
@@ -127,7 +124,7 @@ Let's talk features.
 
 ### Manageability
 
-AWS provides Amazon CloudWatch metics for your database instances at no extra charge.
+AWS provides Amazon CloudWatch metrics for your database instances at no extra charge.
 
 [RDS features overview](https://aws.amazon.com/rds/features/)
 
@@ -161,6 +158,8 @@ Aurora Global Database allows for you to physically replicate your database acro
 
 You can encrypt data at rest and in transit as you would in other RDS instance types.
 
+<!-- TODO: this seems repetitive, how should I structure it? -->
+
 ### Aurora Serverless
 
 There is a serverless offering that autoscales to your required capacity. Ideal for unknown or variable workloads.
@@ -171,7 +170,7 @@ https://aws.amazon.com/rds/aurora/faqs/
 
 Amazon DynamoDB is a serverless NoSQL database. With RDS you have to choose what kind of EC2 instance Amazon will manage your database on. With DynamoDB we don't worry about that. We can scale up and down as much as we like without worrying about the size of an EC2 instance.
 
-We don't have to worry about availability or fault tolerance, they are built right in.
+We don't have to worry about availability or fault tolerance, that is part of the offering.
 
 ### Performance
 
@@ -183,27 +182,26 @@ DynamoDB global tables replicate tables across regions to scale capacity and all
 
 ### Serverless
 
-* DynamoDB has two modes, on-demand and provisioned. 
-  * Use on-demand if you don't know how much peak capacity you need.
-  * Provisioned will automatically scale, but up to a certain maximum capacity (unlike on-demand). Provisioned capacity is more cost effective when you are able to predict the max capacity.
-* When data is modified in DynamoDB you can capture it in a DynamoDB **stream**. This will capture writes/updates/deletes from a DynamoDB table. You can use the stream with AWS Lambda to perform actions in response to changes made to the table.
+- DynamoDB has two modes, on-demand and provisioned.
+  - Use on-demand if you don't know how much peak capacity you need.
+  - Provisioned will automatically scale, but up to a certain maximum capacity (unlike on-demand). Provisioned capacity is more cost effective when you are able to predict the max capacity.
+  - More depth here: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.ProvisionedThroughput.Manual
+- When data is modified in DynamoDB you can capture it in a DynamoDB **stream**. This will capture writes/updates/deletes from a DynamoDB table. You can use the stream with AWS Lambda to perform actions in response to changes made to the table.
 
 ### Enterprise Ready
 
-* Supports transactions. These are multiple batched operations that either all succeed or all fail. Useful when a single operation needs to make multiple operations.
-* Data is encrypted by default with AWS Key Management Service (KMS).
-* Point-in-time recovery allows you to continuously back up your data for a specified retention period.
-* On-demand backup and restore lets you manually create a full backup of your tables.
+- Supports transactions. These are multiple batched operations that either all succeed or all fail. Useful when a single operation needs to make multiple operations.
+- Data is encrypted by default with AWS Key Management Service (KMS).
+- Point-in-time recovery allows you to continuously back up your data for a specified retention period.
+- On-demand backup and restore lets you manually create a full backup of your tables.
 
 [DynamoDB features overview]()
 
-
-
 ## Amazon Redshift
 
-Redshift is a column oriented database used for OLAP. 
+Redshift is a column oriented database used for OLAP.
 
-You load data into Redshift tables, and then you do parallel processing on the loaded data to perform the analytics. 
+You load data into Redshift tables, and then you do parallel processing on the loaded data to perform the analytics.
 
 The leader node sends instructions to the compute nodes which perform the instructions in parallel on data from the client applications.
 
@@ -215,15 +213,15 @@ You pay per hour with the payment rate determined by the size of your compute no
 
 ## Elasticache
 
-Amazon Elasticache makes it easy to host an in-memory database (IMDB) in the cloud. It supports two types of databases, Redis and Memcached. Redis is more popular and more flexible than Memcached.
+<!-- TODO: is this order good -->
 
-Elasticache gives you sub-millisecond performance. Use Elasticache if you need low latency. 
+Amazon Elasticache makes it easy to host an in-memory database (IMDB) in the cloud. Use Elasticache if you need low latency, it has sub-millisecond performance.
 
-You can cache results from a database to improve latency and performance, or you can just use it as a fast key-value store for things like user-authentication tokens.
+It supports two types of databases, Redis and Memcached. Redis is more popular and more flexible than Memcached.
 
-Elaticache stores simple data, not complex related tables.
+Use cases include cacheing results from a database to improve latency and performance, or use as a fast key-value store for things like user-authentication tokens.
 
-To set up Elasticache you tell AWS what size instance you need. They provision the resources and manage the installation for you (installing patches, server maintenance, etc).
+Elasticache stores simple data, not complex related tables. To set up Elasticache you tell AWS what size instance you need. They provision the resources and manage the installation for you (installing patches, server maintenance, etc).
 
 Elasticache resources belong to a VPC so you can use security groups and network ACLs to control access to your instance.
 
@@ -231,8 +229,8 @@ Elasticache is integrated with CloudWatch for monitoring.
 
 ## Other Databases
 
-I'm not so sure about what kind of questions you might see. 
+I'm not so sure about what kind of questions you might see.
 
-* AWS Database Migration Service is for migrating databases.
-* Amazon Neptune is a graph database for highly relational data
-* Amazon Elasticsearch Service allows you to perform a fuzzy search on JSON data.
+- AWS Database Migration Service is for migrating databases.
+- Amazon Neptune is a graph database for highly relational data
+- Amazon Elasticsearch Service allows you to perform a fuzzy search on JSON data.

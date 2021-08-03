@@ -10,6 +10,8 @@ A metric represents a time-ordered set of data points that are published to Clou
 
 ### Namespaces
 
+<!-- TODO: This is too much depth to be explained so poorly. Do you have a diagram? -->
+
 Metrics belong to namespaces. This is used to isolate metrics from eachother so that you don't mistakenly aggregate metrics from different applications into the same statistic.
 
 ### Dimensions

@@ -4,9 +4,9 @@
 
 Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources into a virtual network that resembles a traditional network that you'd operate in your own data center, with the benefits of using the scalable infrastructure of AWS.
 
-VPCs are specific to a region. A single VPC spans all the availability zones in a region. You can make subnets of a VPC, subnets are specific to availability zones.
+VPCs are specific to a region but they span all the availability zones in a region. You can make subnets of a VPC, subnets are specific to availability zones. Multiple VPCs can be in the same region.
 
-<!-- TODO: subnets within -->
+<!-- TODO: make horizontal svg of below -->
 
 ![](./images/vpc-az.png)
 
@@ -62,6 +62,8 @@ This route table is saying that traffic to the VPC (`172.31.0.0/16`) is local to
 
 At the beginning of this section we said that every subnet needs to be associated with a route table, but our route table didn't say anything about any subnets. This is explained by the following image:
 
+<!-- TODO: Is this explained well? Maybe not. -->
+
 ![](./images/route-subnets.png)
 
 There is a **main route table** which is created when a new VPC is created. You do not need to explicitly associate a new subnet with a route table, there is an automatic association with the main route table.
@@ -94,51 +96,50 @@ A route table can be associated with multiple subnets, but a subnet cannot be as
 
 ## Internet Gateway
 
-Instances that have a public IP address in a subnet can connect to the internet we need an internet gateway. Let's look at a route table again to see how this works:
+Instances that have a public IP address in a subnet can connect to the internet need an internet gateway. Let's look at a route table again to see how this works:
 
 ![](./images/route-table.png)
 
-Traffic going to the private IPs of the CIDR block for the VPC stay `local` to the VPC. All other traffic goes to `igw-d2b99dba`, which is an internet gateway that will take this traffic to the internet. If this rule is not in the route table, then traffic will not get routed to the internet gateway even if there is a route table.
+Traffic going to the private IPs of the CIDR block for the VPC stay `local` to the VPC. All other traffic goes to `igw-d2b99dba`, which is an internet gateway that will take this traffic to the internet. If this rule is not in the route table, then traffic will not get routed to the internet gateway.
 
 The internet gateway horizontally
-s, is redundant, and is highly available. AWS manages these things. You do not need to worry about availability or scalability of your internet gateways.
+scales, is redundant, and is highly available. AWS manages these things. You do not need to worry about availability or scalability of your internet gateways.
 
 [Internet Gateway docs](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html)
 
 ## NAT devices
 
-The internet gateway connects devices with public IPs to the internet. Some things shouldn't be accessible by the internet so they don't have a public IP. They still might need to access the internet to update or install new software though!
+Network address translation (**NAT**) devices allow other devices with private IPs to initiate outbound connections to the internet over IPv4 while preventing unwanted inbound connections
 
-We solve this problem by using a NAT (Network Address Translation) device. The NAT device is in a public subnet and has a public IP that is used to communicate with the internet.
-
-**The NAT device allows devices with private IPs to initiate outbound connections to the internet over IPv4 while preventing unwanted inbound connections**
-
-NAT devices are either a **NAT instance** or a **NAT gateway**. The NAT instance has you do translation on an EC2 instance, the NAT gateway is managed by Amazon. NAT gateways are now the preferred NAT device (they are better and easier to use), but NAT instance questions can still appear on the exam.
+NAT devices are either a **NAT instance** or a **NAT gateway**. The NAT instance does translation on an EC2 instance, the NAT gateway is managed by Amazon. NAT gateways are now the preferred NAT device (they are better and easier to use), but NAT instance questions can still appear on the exam.
 
 ### NAT instances
 
-In the diagram below we see database servers that are in a private subnet and are connected to the internet using a NAT instance. The private subnet contains no routes pointing to the internet gateway, and the servers inside do not have public IPs.
+Here is a diagram of a database in a private subnet (has no public IP) connecting to the internet using a NAT instance:
 
-Here is how it works:
+![](./images/NAT-instance.png)
+
+Here is how it works -
 
 1. The Database servers send a request to a public IP.
 2. This public IP is in the range `0.0.0.0/0` and so it is routed to the NAT instance at `nat-instance-id`.
 3. The NAT instance sends this request to the public IP and receives a response back.
 4. The NAT instance sends the response back to the database servers on the private subnet at `10.0.1.0/24`.
 
-![](./images/NAT-instance.png)
+Some additional information
 
-The NAT instance has an elastic IP (an IP address that doesn't change), this is required.
-
-You must disable **source/destination checks** on your EC2 instance when using it as a NAT instance. These check if the instance is either the source or the destination of network traffic before accepting the traffic. The NAT instance is not the source/destination of the traffic, it is a middleman between the private subnet and the internet.
+- The NAT instance has an elastic IP (an IP address that doesn't change), this is required.
+- You must disable **source/destination checks** on your EC2 instance when using it as a NAT instance. These check if the instance is either the source or the destination of network traffic before accepting the traffic. The NAT instance is not the source/destination of the traffic, it is a middleman between the private subnet and the internet.
 
 ### NAT Gateway
 
-The NAT Gateway does NAT but is managed by AWS so you don't have to worry about managing your own EC2 instance. NAT gateways will automatically scale up to 45 Gbps, but the NAT instance is dependent on the EC2 instance type.
+The NAT Gateway is managed by AWS, there is no EC2 instance to manage. NAT gateways automatically scale up to 45 Gbps, but the NAT instance's scalability dependens on the EC2 instance type.
 
 Just like NAT instances, the NAT gateway has an elastic IP and lives in a public subnet.
 
-The NAT gateway is redundant within each availability zone, but if the availability zone experiences problems then you will lose connectivity. You might be tempted to use a single NAT gateway in a single availability zone (NAT Gateways are specific to subnets which are specific to AZ), but then everything in your region loses connectivity if you lose a single AZ. This is why it is best to have separate NAT gateways for each AZ.
+<!-- TODO: What the hell am I on about in the paragraph below -->
+
+The NAT gateway is specific to the availability zone and is redundant within that availability zone. You can use a single NAT gateway for all of your needs in a region, but this means you might lose connectivity for all regional services if the AZ containing the NAT gateway loses connectivity. The architecture is more resilient when each availability zone has a dedicated NAT gateway.
 
 A comparison of the NAT gateways and instances from the AWS documentation:
 
@@ -158,15 +159,21 @@ For IPv6 traffic we can connect to an egress-only internet gateway (instead of a
 
 ## Security Groups
 
-A security group is a virtual firewall. A firewall is a network device that decides what incoming and outgoing traffic to allow or to disallow. This firewall controls which CIDR blocks and security groups can communicate with an EC2 instances, as well as what ports this communication can happen on.
+A security group is a network device that decides what incoming and outgoing traffic to allow or to disallow for an EC2 instance.
 
-Multiple EC2 instances can have the same security group. The security group belongs to a VPC and all instances in that VPC can use the security group. All EC2 instances must have a security group.
+<!-- TODO: An image here, showing all the stuff more diagram like -->
+
+Which CIDR blocks and security groups can communicate with an EC2 instances, as well as what ports this communication can happen on.
+
+<!-- TODO: Lab -->
+
+Multiple EC2 instances can have the same security group as long as they are in the same VPC. All EC2 instances must have a security group.
 
 Here are some properties of security groups:
 
 - You can specify allow rules but not deny rules, traffic that is not explicitly allowed is denied.
 - There are separate rules for inbound and outbound traffic.
-- Security groups are stateful. Suppose they sent a request to an IP address. They will be able to receive the response to their request even if they do not have an inbound security rule that would allow the traffic.
+- Security groups are stateful. Suppose they sent a request to an IP address. They will be able to receive the response to their request even if they do not have an inbound security rule that would allow the traffic. Likewise they can respond to requests that are received even if there is no explicit rule allowing the traffic.
 
 ### Default Security Groups
 
@@ -177,9 +184,12 @@ Here are some properties of security groups:
 
 ## Network ACL (Network Access Control List)
 
+<!-- TODO: Image -->
+
 Network ACLs are also a type of firewall. Here are some differences between the network ACL and the security group.
 
 - Network ACLs are applied to subnets, security groups are applied to EC2 instances.
+  - Because network ACLs are applied to subnets, they are evaluated before the security group is evaluated. Traffic must make it through both the security group and network ACL.
 - The network ACL is stateless, responses to inbound traffic are subject to the rules for outbound traffic. This is not true for security groups, where the outbound rules don't apply for responses to received inbound traffic (it is stateful).
 - The network ACL can have both allow and deny rules. The security group only has allow rules and everything not explicitly allowed is implicitly denied.
 
@@ -190,7 +200,7 @@ Here are some similarities between the network ACL and the security group.
 - You can associate a network ACL with multiple subnets, just like a security group can be associated with multiple EC2 instances.
 - VPCs come with a default network ACL, just like EC2 instances come with a default security group.
 
-The default NACL that comes with the VPC allows all traffic in and out of the VPC. If you make a custom NACL, it will deny all inbound and allow all outbound traffic unless you make changes to these settings.
+The default NACL that comes with the VPC allows all traffic in and out of the VPC. Custom NACLs deny all inbound and allow all outbound traffic by default.
 
 Since there are both allow and deny rules we need a way of deciding which rule is correct when the rules conflict. To solve this, there are numbers associated with each rule, and the lowest number wins. These numbers are from 1 to 32766. AWS recommends spacing out your rules, so that you can put a rule between your rules (ex. put rule 15 between rule 10 and rule 20) in case you need to.
 
@@ -202,11 +212,11 @@ VPC endpoints enable private connections between your VPC and AWS services.
 
 Suppose we want to access an AWS service (like a database) from a private subnet. This service has a public IP that we can use. So we can use a NAT gateway to communicate from our private subnet to the internet which will communicate with the database.
 
-It would be better if we could just talk to our AWS services over a private IP address and not send any traffic into the public internet. **This is the purpose of VPC endpoints.**
+It would be better to talk to AWS services over a private IP address and not send any traffic into the public internet. **This is the purpose of VPC endpoints.**
 
 VPC endpoints are horizontally scaled, redundant, and highly available.
 
-There are two types of VPC endpoints, the type you choose is determined by the service you are accessing:
+There are two types of VPC endpoints, the type you should use is determined by the service you are accessing:
 
 - Gateway endpoints are used for S3 and DynamoDB (two AWS services discussed in depth later).
 - Interface endpoints are used for other services.
@@ -239,7 +249,11 @@ When peering VPCs you need to update your route tables to route traffic in the a
 
 ## Bastion Hosts
 
-You can set up a bastion host where you ssh into a public subnet. This bastion host in the public subnet will be able to ssh into private subnets.
+<!-- TODO: What is the level of depth I should give here? -->
+
+There is a situation where you want to provide SSH access to linux instances, but want to keep these instances in private subnets. There is a blog post from Amazon talking about how to use **bastion hosts** that are instances in a public subnet that have are allowed to SSH into the private subnet. This is like a layer of indirection regarding SSH. Apparently this was all necessary to log who was coming into the instances in the private subnet and having them in a public subnet might be too much of a security risk?
+
+I think VPC flow logs is the best way to log, so why bastion hosts?
 
 [Bastion hosts blog post](https://aws.amazon.com/blogs/security/how-to-record-ssh-sessions-established-through-a-bastion-host/)
 
@@ -247,7 +261,7 @@ You can set up a bastion host where you ssh into a public subnet. This bastion h
 
 https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/network-to-amazon-vpc-connectivity-options.html
 
-Although the term VPN connection is a general term, in this documentation, a VPN connection refers to the connection between your VPC and your own on-premises network. Site-to-Site VPN supports Internet Protocol security (IPsec) VPN connections.
+Although _VPN connection_ is a general term, we now use VPN connection to refers to the connection between your VPC and your own on-premises network. Site-to-Site VPN supports Internet Protocol security (IPsec) VPN connections.
 
 These options are useful for integrating AWS resources with your existing on-site services (for example, monitoring, authentication, security, data or other systems) by extending your internal networks into the AWS Cloud.
 
@@ -255,16 +269,16 @@ These options are useful for integrating AWS resources with your existing on-sit
 
 You can configure a connection between a VPC and a local network, like your home network or the network for your office.
 
-The diagram below shows the connection between an AWS VPC and an on-premises network. Let's talk about some of the components:
+The diagram below shows the connection between an AWS VPC and an on-premises network.
+
+![](./images/vpc-site-to-site.png)
+
+Let's talk about some of the components:
 
 - **VPN connection**: A secure connection between AWS and your on premises network.
 - **Virtual private gateway**: Sets up a secure connection on the AWS side.
 - **Customer gateway device**: A physical device that you set up on-premises to connect with AWS.
 - **Customer gateway**: A resource that you create in AWS that represents the customer gateway device in your on-premises network.
-
-IPsec is just a protocol for
-
-![](./images/vpc-site-to-site.png)
 
 https://en.wikipedia.org/wiki/IPsec
 

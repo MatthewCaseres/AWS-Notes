@@ -2,8 +2,8 @@
 
 ## What is SNS?
 
-Amazon SNS delivers messages from publishers to subscribers, this pattern is often called pub-sub. 
-You can publish a message to an SNS topic and all of the subscribers to this topic will receive the message. 
+Amazon SNS delivers messages from publishers to subscribers, this pattern is often called pub-sub.
+You can publish a message to an SNS topic and all of the subscribers to this topic will receive the message.
 
 Subscribers to the topic can be SQS queues, HTTP, email, mobile push notifications, and mobile text messages (SMS). The publishers are AWS services, an example use case is using SNS to send yourself a text message when you set off an Amazon CloudWatch alarm.
 
@@ -21,10 +21,10 @@ You can use the fanout pattern to replicate data sent to your production environ
 
 Just like there are SQS standard and SQS FIFO, there are SNS standard and SNS FIFO. The differences are quite similar.
 
-* Standard is best-effort message ordering, FIFO is always in the same order the message was sent.
-* Standard is at-least once message delivery, FIFO is exactly-once message delivery.
-* Standard has higher throughput than FIFO.
-* Only FIFO SQS queues can subscribe to FIFO SNS topics. Lambda, HTTP, SMS, email, and mobile apps can all subscribe to standard SNS topics but not FIFO SNS topics.
+- Standard is best-effort message ordering, FIFO is always in the same order the message was sent.
+- Standard is at-least once message delivery, FIFO is exactly-once message delivery.
+- Standard has higher throughput than FIFO.
+- Only FIFO SQS queues can subscribe to FIFO SNS topics. Lambda, HTTP, SMS, email, and mobile apps can all subscribe to standard SNS topics but not FIFO SNS topics.
 
 Use FIFO SNS topics with FIFO SQS queues when you need to decouple an application and the order of messages is important.
 
@@ -53,7 +53,7 @@ Messages sent from an SNS topic can include a `MessageAttributes` field that can
          "Value": "order_placed"
       },
       "price_usd": {
-         "Type": "Number", 
+         "Type": "Number",
          "Value":210.75
       }
    }
@@ -64,10 +64,10 @@ In the subscription filter we can define a JSON policy that determines which mes
 
 ```json
 {
-   "store": ["example_corp"],
-   "event": [{"anything-but": "order_cancelled"}],
-   "customer_interests": "soccer",
-   "price_usd": [{"numeric": [">=", 100]}]
+  "store": ["example_corp"],
+  "event": [{ "anything-but": "order_cancelled" }],
+  "customer_sport": "soccer",
+  "price_usd": [{ "numeric": [">=", 100] }]
 }
 ```
 

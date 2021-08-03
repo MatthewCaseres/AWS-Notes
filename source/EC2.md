@@ -89,6 +89,8 @@ Here are some differences between the two:
 
 ### Spot Fleet
 
+<!-- TODO: This isn't super clear. Maybe do a lab for YouTube with this. -->
+
 A Spot Fleet is a collection, or fleet, of Spot Instances, and optionally On-Demand Instances. This fleet of instances tried to meet the capacity specified in the spot fleet request.
 
 A Spot Instance pool is a set of unused EC2 instances with the same instance type (for example, m5.large), operating system, Availability Zone, and network platform.
@@ -107,6 +109,8 @@ The allocation strategy for the Spot Instances in your Spot Fleet determines how
 ### Request Types
 
 In the diagram below we see that a spot request launches instances. The spot request has a **request type** which determines if launched instances restart or not upon interruption (if the spot price goes above your max price or if you manually interrupt). Instances launched from a one-time spot request will go away, but instances launched from a persistent spot request will be restarted by the spot request. Thus, if you wish to terminate a persistent spot instance you must first terminate the request.
+
+<!-- TODO: I think this diagram is confusing for the thing I am trying to explain. Maybe just highlight request type!?-->
 
 ![](./images/EC2-spot-flow.png)
 
@@ -128,6 +132,8 @@ To determine if your instance is over-provisioned you can use the [AWS Compute O
 ## Placement groups
 
 EC2 tries to spread out your instances to minimize correlated failures. You can use placement groups to influence the placement of a group of interdependent instances to meet the needs of your workload. Types of placement groups are -
+
+<!-- TODO: can we get some pictures up in here? -->
 
 - **Cluster** packs instances close together inside an Availability Zone. This strategy enables workloads to achieve the low-latency network performance necessary for tightly-coupled node-to-node communication that is typical of HPC applications.
 - **Partition** multiple groups of instances where each group belongs to the same rack in a data center, and different groups belong to different racks. This strategy is typically used by large distributed and replicated workloads, such as Hadoop, Cassandra, and Kafka.
@@ -153,7 +159,9 @@ You can only have 7 partitions per AZ, so if there are three AZ in a region we c
 
 Each instance is on its own rack. Each rack has its own power source and network.
 
-You can only have 7 _instances_ per AZ, so if there are six AZ in a region we can have 42 partitions. Within each partition you can have many instances.
+You can only have 7 _instances_ per AZ, so if there are six AZ in a region we can have 42 total instances.
+
+Note the difference between partition and spread groups.
 
 ![EC2 Placement Spread](./images/ec2-placement-partition.png)
 
@@ -173,6 +181,8 @@ An elastic network interface is a logical networking component in a VPC that rep
 You can create a network interface, attach it to an instance, detach it from an instance, and attach it to another instance. The attributes of a network interface follow it as it's attached or detached from an instance and reattached to another instance. When you move a network interface from one instance to another, network traffic is redirected to the new instance.
 
 Each instance has a default network interface, called the primary network interface. You cannot detach a primary network interface from an instance.
+
+<!-- TODO: This section contains references to both S3 and VPC, which seem to come later? Troubling. -->
 
 ```mcq
 answers:

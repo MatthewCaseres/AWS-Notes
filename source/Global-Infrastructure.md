@@ -6,8 +6,6 @@ Companies used to manage a room full of machines that did their computation. Thi
 
 ![](./images/Cern_datacenter.jpeg)
 
-If the company wanted extra computational power they would have to buy another computer. This is a big commitment, and it is possible that the company overestimates or overestimates the amount of computational power they need. Or they might only need the computer for one month of the year, or one hour of the day.
-
 ## Benefits of AWS
 
 With AWS, Amazon manages the data center and customers are able to rent and manage their infrastructure over the web. Here are six advantages of cloud computing [from AWS](https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html)
